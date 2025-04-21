@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Scholarship List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="scholarship.css" rel="stylesheet">
+ 
+</head>
+<body>
+  <div class="background-container">
+    <img class="hero-blur-image" src="images/hero blur img.png" alt="Hero Blur" onerror="this.style.display='none'">
+    <img class="hero-icons-image parallax" data-speed="4" src="images/hero icons img.png" alt="Hero Icons" onerror="this.style.display='none'">
+    <img class="hero-rings-image" src="images/hero rings icon.png" alt="Hero Rings" onerror="this.style.display='none'">
+    <div class="background-overlay"></div>
+  </div>
+  <!-- Sticky Navbar -->
+  <header>
+    <div class="head-left">
+      <img src="images/logo.png" alt="Student Sphere Logo" onerror="this.src='https://via.placeholder.com/45'; this.alt='Placeholder Logo'">
+      <h1>STUDENT SPHERE</h1>
+    </div>
+    <ul>
+      <li><a href="MainPage.html">HOME</a></li>
+      <li><a href="news.html">NEWS & BLOG</a></li>
+      <li><a href="#">EXPLORE</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
+    <!-- <div class="head-right">
+       <div class="button-box">
+        <button id="signinButton">SIGN IN</button>
+      </div>
+    </div> -->
+    <div class="menu-icon">
+      <i class='bx bx-menu'></i>
+    </div>
+  </header>
+
+  <!-- Sidebar for Mobile -->
+  <div class="sidebar">
+    <div class="close-icon">
+      <i class='bx bx-x'></i>
+    </div>
+    <ul>
+      <li><a href="#">HOME</a></li>
+      <li><a href="#">NEWS & BLOG</a></li>
+      <li><a href="#">EXPLORE</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
+    <div class="social-sidebar">
+      <a href="#"><i class='bx bxl-discord-alt'></i></a>
+      <a href="#"><i class='bx bxl-youtube'></i></a>
+      <a href="#"><i class='bx bxl-github'></i></a>
+      <a href="#"><i class='bx bxl-linkedin-square'></i></a>
+    </div>
+  </div>
+
+  
+
+  <!-- Hero Section -->
+  <!-- <div class="hero">
+    <img class="hero-blur-image" src="images/hero blur img.png" alt="Hero Blur" onerror="this.style.display='none'">
+    <img class="hero-icons-image parallax" data-speed="4" src="images/hero icons img.png" alt="Hero Icons" onerror="this.style.display='none'">
+    <img class="hero-rings-image" src="images/hero rings icon.png" alt="Hero Rings" onerror="this.style.display='none'">
+    <h1>Available Scholarships</h1>
+  </div> -->
+
+  <div class="sub-heading">SCHOLARSHIP CATEGORY</div>
+  <h1>Choose Your Desired Category</h1>
+
+  <div class="grid-container">
+    <div class="card" data-category="indian">
+      <div class="card-icon">🎓</div>
+      <div class="card-text">Indian Scholarships</div>
+    </div>
+    <div class="card" data-category="international">
+      <div class="card-icon">🌐</div>
+      <div class="card-text">International Scholarships</div>
+    </div>
+    <div class="card" data-category="research">
+      <div class="card-icon">🧪</div>
+      <div class="card-text">Research Fellowship</div>
+    </div>
+    <div class="card" data-category="search">
+      <div class="card-icon">🔍</div>
+      <div class="card-text">Search Scholarships</div>
+    </div>
+    <div class="card" data-category="girls">
+      <div class="card-icon">👩‍🎓</div>
+      <div class="card-text">Only for Girls</div>
+    </div>
+    <div class="card" data-category="minority">
+      <div class="card-icon">👨‍👩‍👧‍👦</div>
+      <div class="card-text">Minority Scholarships</div>
+    </div>
+    <div class="card" data-category="bpl">
+      <div class="card-icon">💰</div>
+      <div class="card-text">BPL Scholarships</div>
+    </div>
+    <div class="card" data-category="all">
+      <div class="card-icon">📋</div>
+      <div class="card-text">All Scholarships</div>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="scholarshipSearch" class="search-input" placeholder="Search for scholarships...">
+  </div>
+
+  <div class="filter-chips">
+    <button class="filter-chip active" data-filter="all">All</button>
+    <button class="filter-chip" data-filter="undergraduate">Undergraduate</button>
+    <button class="filter-chip" data-filter="postgraduate">Postgraduate</button>
+    <button class="filter-chip" data-filter="research">Research</button>
+    <button class="filter-chip" data-filter="merit">Merit-based</button>
+    <button class="filter-chip" data-filter="need">Need-based</button>
+  </div>
+
+  <div class="loading-indicator" id="loadingIndicator"></div>
+
+  <main class="scholarship-container">
+    <h1>Popular Scholarships</h1>
+    <div id="scholarship-list" class="scholarship-list">
+      <p class="fallback-message" style="display: none;">Loading scholarships... Please enable JavaScript.</p>
+    </div>
+
+    <div id="scholarship-details" class="scholarship-details">
+      <button id="back-button" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2 id="scholarship-title"></h2>
+      <div class="detail-card">
+        <h3><i class="fas fa-clipboard-check"></i> Eligibility Criteria</h3>
+        <p id="criteria"></p>
+      </div>
+      <div class="detail-card">
+        <h3><i class="fas fa-rupee-sign"></i> Amount</h3>
+        <p id="amount"></p>
+      </div>
+      <div class="detail-card">
+        <h3><i class="fas fa-file-alt"></i> Documents Required</h3>
+        <p id="documents"></p>
+      </div>
+      <div class="detail-card">
+        <h3><i class="fas fa-info-circle"></i> Details</h3>
+        <p id="details-info"></p>
+      </div>
+      <button id="applyNow" class="btn-apply">
+        Apply Now <i class="fas fa-external-link-alt"></i>
+      </button>
+    </div>
+  </main>
+
+  <div class="notification" id="notification">Scholarship saved to favorites!</div>
+
+  <script src="scholership.js"></script>
+</body>
+</html>

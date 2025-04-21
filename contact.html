@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Section</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            perspective: 1000px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #4776E6, #8E54E9);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            perspective: 1000px;
+        }
+
+        /* Card wrapper for flip effect */
+        .card-wrapper {
+            width: 280px;
+            height: 420px;
+            perspective: 1500px;
+            position: relative;
+            transition: transform 1.2s ease-in-out;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        /* Glow effect */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, #4776E6, #8E54E9, #4776E6);
+            z-index: -2;
+            border-radius: 19px;
+            filter: blur(12px);
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .card-wrapper:hover .card {
+            transform: rotateY(180deg);
+        }
+
+        .card-wrapper:hover .card::after {
+            opacity: 0.8;
+            animation: smoothGlowing 3s ease-in-out infinite;
+        }
+
+        @keyframes smoothGlowing {
+            0% {
+                filter: blur(12px) brightness(1);
+            }
+            50% {
+                filter: blur(16px) brightness(1.2);
+            }
+            100% {
+                filter: blur(12px) brightness(1);
+            }
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, #1e1e1e, #292929);
+            text-align: center;
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #292929, #1e1e1e);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .card-front::before, .card-back::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+            z-index: -1;
+        }
+
+        .card-wrapper:hover .card-front::before, .card-wrapper:hover .card-back::before {
+            animation: smoothShine 2s ease-out forwards;
+        }
+
+        @keyframes smoothShine {
+            0% {
+                left: -100%;
+                top: -100%;
+            }
+            100% {
+                left: 200%;
+                top: 200%;
+            }
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 4px solid;
+            border-image: linear-gradient(45deg, #4776E6, #8E54E9) 1;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card-wrapper:hover .profile-img {
+            transform: scale(1.05);
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h3 {
+            color: #fff;
+            margin: 0.5rem 0;
+            font-size: 1.3rem;
+            position: relative;
+            display: inline-block;
+            transition: transform 0.5s ease;
+        }
+
+        h3::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #4776E6, #8E54E9);
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card-wrapper:hover h3::after {
+            width: 100%;
+        }
+
+        p {
+            color: #b3b3b3;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .contact-details {
+            margin: 1rem 0;
+            text-align: left;
+            padding: 0 10px;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: #b3b3b3;
+            transition: transform 0.4s ease;
+        }
+
+        .contact-icon {
+            margin-right: 8px;
+            color: #4776E6;
+            width: 20px;
+            text-align: center;
+        }
+
+        .contact-text {
+            word-break: break-word;
+        }
+
+        .email {
+            color: #b3b3b3;
+            display: block;
+            margin: 0.8rem 0;
+            font-size: 0.9rem;
+            transition: all 0.5s ease;
+        }
+
+        .card-wrapper:hover .email {
+            color: #4776E6;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            transition: transform 0.6s ease;
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 16px;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.1);
+            background: linear-gradient(45deg, #4776E6, #8E54E9);
+        }
+
+        .back-message {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #4776E6;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .card-wrapper:hover .back-message {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.2s;
+        }
+
+        .card-back p:not(.back-message) {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .card-wrapper:hover .card-back p:not(.back-message) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .card-back .social-icons {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .card-wrapper:hover .card-back .social-icons {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.4s;
+        }
+
+        .back-button {
+            background: linear-gradient(45deg, #4776E6, #8E54E9);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .card-wrapper:hover .back-button {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(71, 118, 230, 0.5);
+        }
+
+        @keyframes smoothFloat {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .card-wrapper:nth-child(1) {
+            animation: smoothFloat 8s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .card-wrapper:nth-child(2) {
+            animation: smoothFloat 8s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .card-wrapper:nth-child(3) {
+            animation: smoothFloat 8s ease-in-out infinite;
+            animation-delay: 4s;
+        }
+
+        .card-wrapper:nth-child(4) {
+            animation: smoothFloat 8s ease-in-out infinite;
+            animation-delay: 6s;
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card-wrapper {
+                width: 80%;
+                max-width: 300px;
+                margin-bottom: 1rem;
+                height: 450px;
+            }
+            
+            .profile-img {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div class="cards-container">
+            <!-- Card 1 -->
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-front">
+                        <div class="profile-img">
+                            <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Prasad Pratihar" >
+                        </div>
+                        <h3>PRASAD PRATIHAR</h3>
+                        <p>Web Developer</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <span class="contact-icon">✉</span>
+                                <span class="contact-text">prasadpratihar2@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">☎</span>
+                                <span class="contact-text">+9 123456789</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">🏠</span>
+                                <span class="contact-text">JHARGRAM,WEST-BENGAL,INDIA</span>
+                            </div>
+                        </div>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/prsd/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">fa</a>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>PRASAD PRATIHAR</h3>
+                        <p class="back-message">Let's Connect!</p>
+                        <p>I specialize in responsive web design and modern JavaScript frameworks. Always open to discuss new projects and ideas.</p>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/prsd/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">gh</a>
+                        </div>
+                        <button class="back-button">Contact Me</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-front">
+                        <div class="profile-img">
+                            <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Sarah Johnson">
+                        </div>
+                        <h3>SUBHAJIT PATRA</h3>
+                        <p>web Designer</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <span class="contact-icon">✉</span>
+                                <span class="contact-text">subhajitpatra1818@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">☎</span>
+                                <span class="contact-text">+1 234-567</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">🏠</span>
+                                <span class="contact-text">BISHNUPUR,WEST-BENGAL,INDIA</span>
+                            </div>
+                        </div>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/subha.zz_18/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">dr</a>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>SUBHAJIT PATRA</h3>
+                        <p class="back-message">Web DEV</p>
+                        <p>Creating intuitive and beautiful user experiences is my passion. I love turning complex problems into simple, elegant designs.</p>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/subha.zz_18/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">dr</a>
+                        </div>
+                        <button class="back-button">Contact Me</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-front">
+                        <div class="profile-img">
+                            <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Michael Chen">
+                        </div>
+                        <h3>SOUDISH LAHA</h3>
+                        <p>Web Developer</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <span class="contact-icon">✉</span>
+                                <span class="contact-text">lahasoudish2006@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">☎</span>
+                                <span class="contact-text">+86 123 4567 8910</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">🏠</span>
+                                <span class="contact-text">SARENGA,WEST-BENGAL,INDIA</span>
+                            </div>
+                        </div>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/soudish__laha/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">gh</a>
+                            <a href="#" class="social-icon">tw</a>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>SOUDISH LAHA</h3>
+                        <p class="back-message">Efficient Code, Powerful Solutions</p>
+                        <p>I build robust and scalable backend systems. Performance optimization and clean architecture are my specialties.</p>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/soudish__laha/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">gh</a>
+                            <a href="#" class="social-icon">tw</a>
+                        </div>
+                        <button class="back-button">Contact Me</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-front">
+                        <div class="profile-img">
+                            <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Alex Rodriguez">
+                        </div>
+                        <h3>SAYAN JANA</h3>
+                        <p>Student Support</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <span class="contact-icon">✉</span>
+                                <span class="contact-text">jsayan37@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">☎</span>
+                                <span class="contact-text">+34 612 345 678</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">🏠</span>
+                                <span class="contact-text">JHARGRAM,WEST-BENGAL,INDIA</span>
+                            </div>
+                        </div>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/itz_c_hi_ku/" class="">ig</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">fb</a>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>SAYAN JANA</h3>
+                        <p class="back-message">web devloper</p>
+                        <p>Dedicated to ensuring students have the best possible experience. I'm your go-to person for any questions or assistance you might need.</p>
+                        <div class="social-icons">
+                            <a href="https://www.instagram.com/itz_c_hi_ku/" class="social-icon">in</a>
+                            <a href="#" class="social-icon">tw</a>
+                            <a href="#" class="social-icon">fb</a>
+                        </div>
+                        <button class="back-button">Contact Me</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

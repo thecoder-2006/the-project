@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Categorized by Subject</title>
+    <script src="book.js" defer></script>
+    <style>
+        /* Basic Reset and Font Setup */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          line-height: 1.6;
+          color: #e0e0e0;
+          background-image: url('https://i.etsystatic.com/11810216/r/il/9ad808/3025384484/il_fullxfull.3025384484_6jy5.jpg');
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+          background-repeat: no-repeat;
+          padding: 20px;
+          position: relative;
+          overflow-x: hidden;
+        }
+
+        /* Faded Background Overlay */
+        body::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(125deg, rgba(7, 27, 47, 0.7) 0%, rgba(26, 26, 46, 0.7) 50%, rgba(22, 33, 62, 0.7) 100%);
+          z-index: -2;
+        }
+
+        /* Floating Particles */
+        @keyframes float {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+          50% { opacity: 0.3; }
+          100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .particle {
+          position: fixed;
+          width: 5px;
+          height: 5px;
+          background-color: #4a89dc;
+          border-radius: 50%;
+          z-index: -1;
+          animation: float 15s infinite linear;
+        }
+
+        /* Generate 20 particles with different positions and delays */
+        .particles-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+          pointer-events: none;
+        }
+
+        /* Header Styling */
+        h1 {
+          text-align: center;
+          color: #4a89dc;
+          margin-bottom: 30px;
+          font-size: 2.5rem;
+          padding-bottom: 15px;
+          border-bottom: 2px solid #4a89dc;
+          text-shadow: 0 0 10px rgba(74, 137, 220, 0.3);
+          background: rgba(30, 30, 30, 0.7);
+          padding: 10px;
+          border-radius: 8px;
+        }
+
+        h2 {
+          color: #4a89dc;
+          margin: 30px 0 15px;
+          padding-left: 10px;
+          border-left: 5px solid #4a89dc;
+          text-shadow: 0 0 5px rgba(74, 137, 220, 0.3);
+          background: rgba(30, 30, 30, 0.7);
+          padding: 10px;
+          border-radius: 8px;
+        }
+
+        /* Search Bar Styling */
+        .search-bar {
+          max-width: 600px;
+          margin: 0 auto 30px;
+        }
+
+        #search {
+          width: 100%;
+          padding: 12px 20px;
+          font-size: 1rem;
+          border: 1px solid #333;
+          border-radius: 25px;
+          background-color: rgba(255, 255, 255, 0.1);
+          color: #e0e0e0;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 10px rgba(74, 137, 220, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        #search:focus {
+          outline: none;
+          border-color: #4a89dc;
+          box-shadow: 0 2px 10px rgba(74, 137, 220, 0.5);
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        #search::placeholder {
+          color: #999;
+        }
+
+        /* Category Slider Styling */
+        .category-slider {
+          display: flex;
+          overflow-x: auto;
+          gap: 20px;
+          padding: 20px 10px;
+          scrollbar-width: thin;
+          scrollbar-color: #4a89dc #1e1e1e;
+          background: rgba(30, 30, 30, 0.7);
+          border-radius: 8px;
+        }
+
+        .category-slider::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        .category-slider::-webkit-scrollbar-track {
+          background: #1e1e1e;
+          border-radius: 10px;
+        }
+
+        .category-slider::-webkit-scrollbar-thumb {
+          background: #4a89dc;
+          border-radius: 10px;
+        }
+
+        /* Book Card Styling */
+        .book {
+          flex: 0 0 auto;
+          width: 180px;
+          background: rgba(30, 30, 30, 0.9);
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+          transition: transform 0.4s ease, box-shadow 0.4s ease;
+          position: relative;
+        }
+
+        .book::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, rgba(74, 137, 220, 0.2) 0%, transparent 100%);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+
+        .book:hover {
+          transform: translateY(-8px) scale(1.03);
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(74, 137, 220, 0.3);
+        }
+
+        .book:hover::before {
+          opacity: 1;
+        }
+
+        .book a {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .book img {
+          width: 100%;
+          height: 250px;
+          object-fit: cover;
+          border-bottom: 1px solid #333;
+          transition: filter 0.3s ease;
+        }
+
+        .book:hover img {
+          filter: brightness(1.1);
+        }
+
+        .book p {
+          padding: 10px;
+          font-size: 0.9rem;
+          text-align: center;
+        }
+
+        .book p:first-of-type {
+          color: #e0e0e0;
+          font-weight: bold;
+          margin-bottom: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .book p:last-of-type {
+          color: #999;
+          font-size: 0.8rem;
+          font-style: italic;
+        }
+
+        /* Glow Effect on Hover */
+        @keyframes glow {
+          0% { box-shadow: 0 0 5px rgba(74, 137, 220, 0.5); }
+          50% { box-shadow: 0 0 20px rgba(74, 137, 220, 0.8); }
+          100% { box-shadow: 0 0 5px rgba(74, 137, 220, 0.5); }
+        }
+
+        .book:hover {
+          animation: glow 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .book {
+            width: 150px;
+          }
+          
+          .book img {
+            height: 200px;
+          }
+          
+          h1 {
+            font-size: 2rem;
+          }
+          
+          h2 {
+            font-size: 1.5rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .book {
+            width: 130px;
+          }
+          
+          .book img {
+            height: 180px;
+          }
+          
+          body {
+            padding: 10px;
+          }
+        }
+
+        /* Book Search Functionality */
+        .book.hidden {
+          display: none;
+        }
+
+        /* Category Animation */
+        @keyframes slideIn {
+          from {
+            transform: translateX(-20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        h2 {
+          animation: slideIn 0.6s ease forwards;
+        }
+
+        .category-slider {
+          animation: slideIn 0.8s ease forwards;
+        }
+    </style>
+    <script>
+        function filterBooks() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const books = document.querySelectorAll('.book');
+
+            books.forEach(book => {
+                const title = book.querySelector('p').innerText.toLowerCase();
+                const author = book.querySelectorAll('p')[1].innerText.toLowerCase();
+                if (title.includes(searchInput) || author.includes(searchInput)) {
+                    book.style.display = 'inline-block';
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="particles-container"></div>
+    <h1>Books Categorized by Subject</h1>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Search books by name or author" onkeyup="filterBooks()">
+    </div>
+
+    <h2>Stories & Novels</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://www.ebanglalibrary.com/books/%E0%A6%90%E0%A6%A4%E0%A6%BF%E0%A6%B9%E0%A6%BE%E0%A6%B8%E0%A6%BF%E0%A6%95-%E0%A6%95%E0%A6%BE%E0%A6%B9%E0%A6%BF%E0%A6%A8%E0%A7%80-%E0%A6%B8%E0%A6%AE%E0%A6%97%E0%A7%8D%E0%A6%B0-%E0%A6%B6%E0%A6%B0/#google_vignette">
+                <img src="https://cdn.ebanglalibrary.com/wp-content/uploads/2024/05/Oitihasik-Kahini-Samagra.jpg.webp" alt="ঐতিহাসিক কাহিনী সমগ্র">
+                <p>ঐতিহাসিক কাহিনী সমগ্র</p>
+            </a>
+            <p>শরদিন্দু বন্দ্যোপাধ্যায়</p>
+        </div>
+        <div class="book">
+            <a href="https://www.ebanglalibrary.com/books/%E0%A6%B6%E0%A6%B0%E0%A7%8E-%E0%A6%97%E0%A6%B2%E0%A7%8D%E0%A6%AA-%E0%A6%B8%E0%A6%AE%E0%A6%97%E0%A7%8D%E0%A6%B0-%E0%A6%B6%E0%A6%B0%E0%A7%8E%E0%A6%9A%E0%A6%A8%E0%A7%8D%E0%A6%A6%E0%A7%8D%E0%A6%B0/">
+                <img src="https://cdn.ebanglalibrary.com/wp-content/uploads/2023/09/Sharat-Galpa-Samagra.jpg.webp" alt="শরৎ গল্প সমগ্র">
+                <p>শরৎ গল্প সমগ্র</p>
+            </a>
+            <p>শরৎচন্দ্র চট্টোপাধ্যায়</p>
+        </div>
+        <div class="book">
+            <a href="https://www.ebanglalibrary.com/books/%E0%A6%97%E0%A6%B2%E0%A7%8D%E0%A6%AA%E0%A6%97%E0%A7%81%E0%A6%9A%E0%A7%8D%E0%A6%9B-%E0%A6%B0%E0%A6%AC%E0%A7%80%E0%A6%A8%E0%A7%8D%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A6%A8%E0%A6%BE%E0%A6%A5-%E0%A6%A0/">
+                <img src="https://media.s-bol.com/Y2DvQEG5L2p/524x840.jpg" alt="গল্পগুচ্ছ">
+                <p>গল্পগুচ্ছ</p>
+            </a>
+            <p>রবীন্দ্রনাথ ঠাকুর</p>
+        </div>
+        <div class="book">
+            <a href="https://drive.google.com/file/d/1HBPc7R5ujT5WwRzNYOJIBy42mSOEVzNu/view">
+                <img src="https://th.bing.com/th/id/OIP.Kip6DWSi1dM43CIlx_HVWQHaKW?rs=1&pid=ImgDetMain" alt="Pride and Prejudice">
+                <p>Pride and Prejudice</p>
+            </a>
+            <p>Jane Austen</p>
+        </div>
+        <div class="book">
+            <a href="https://www.gutenberg.org/cache/epub/514/pg514-images.html">
+                <img src="https://hachette.imgix.net/books/9780349011820.jpg?auto=compress,format" alt="Little Women">
+                <p>Little Women</p>
+            </a>
+            <p>Louisa May Alcott</p>
+        </div>
+        <div class="book">
+            <a href="https://bengaliebook.com/wp-content/uploads/2021/10/%E0%A6%AA%E0%A7%8D%E0%A6%B0%E0%A7%8B%E0%A6%AB%E0%A7%87%E0%A6%B8%E0%A6%B0-%E0%A6%B6%E0%A6%99%E0%A7%8D%E0%A6%95%E0%A7%81-%E0%A6%93-%E0%A6%86%E0%A6%B6%E0%A7%8D%E0%A6%9A%E0%A6%B0%E0%A7%8D%E0%A6%AF-%E0%A6%AA%E0%A7%81%E0%A6%A4%E0%A7%81%E0%A6%B2.pdf">
+                <img src="https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/img141221_91813.gif" alt="প্রোফেসর শঙ্কু ও আশ্চর্য পুতুল">
+                <p>প্রোফেসর শঙ্কু ও আশ্চর্য পুতুল </p>
+            </a>
+            <p>সত্যজিৎ রায়</p>
+        </div>
+    </div>
+
+    <h2>Mathematics</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://web.njit.edu/~akansu/PAPERS/GHHardy-AMathematiciansApology.pdf">
+                <img src="https://th.bing.com/th/id/OIP.oEiuLXrfRV-0Ai8iEJCHvgAAAA?rs=1&pid=ImgDetMain" alt="A Mathematician's Apology">
+                <p>A Mathematician's Apology</p>
+            </a>
+            <p>G. H. Hardy</p>
+        </div>
+        <div class="book">
+            <a href="https://www.lse.ac.uk/Events/Events-Assets/PDF/2019/01-LT/20190327-Learning-from-Data.pdf">
+                <img src="https://th.bing.com/th/id/OIP.hnnVU-Ig3mhq9fa-T6_MfAAAAA?rs=1&pid=ImgDetMain" alt="The Art of Statistics">
+                <p>The Art of Statistics</p>
+            </a>
+            <p>David Spiegelhalter</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://images-na.ssl-images-amazon.com/images/I/5154rZIOqQL.jpg" alt="How Not to Be Wrong: The Power of Mathematical Thinking">
+                <p>How Not to Be Wrong: The Power of Mathematical Thinking</p>
+            </a>
+            <p>Jordan Ellenberg</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://m.media-amazon.com/images/I/51dl8XUjbdL.SY445_SX342.jpg" alt="Mathematics for the Nonmathematician">
+                <p>Mathematics for the Nonmathematician</p>
+            </a>
+            <p>Morris Kline</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/R.713fddb71c6b8a41eb373ee2812902f5?rik=TXSU%2fFedJeU9GA&riu=http%3a%2f%2fwww.zyymat.com%2fwp-content%2fuploads%2f2013%2f04%2fThe-Princeton-companion-to-mathematics.jpg&ehk=4RNE0z0cAXniIuJ%2bmhy98MO1GS8S3oG9z0dmaqPMWrg%3d&risl=&pid=ImgRaw&r=0" alt="The Princeton Companion to Mathematics">
+                <p>The Princeton Companion to Mathematics</p>
+            </a>
+            <p>Edited by Timothy Gowers</p>
+        </div>
+    </div>
+
+    <h2>Physics</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://i.pinimg.com/originals/8c/21/5e/8c215e20b06a38926386f00a1d8b1163.jpg" alt="The Fabric of the Cosmos">
+                <p>The Fabric of the Cosmos</p>
+            </a>
+            <p>Brian Greene</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.hztkS43WPbxb5HcTA6boBgHaLH?rs=1&pid=ImgDetMain" alt="Six Easy Pieces">
+                <p>Six Easy Pieces</p>
+            </a>
+            <p>Richard P. Feynman</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://i0.wp.com/printige.net/wp-content/uploads/2021/04/Astrophysics-For-People-In-A-Hurry-scaled.jpg?resize=1187%2C1536&ssl=1" alt="Astrophysics for People in a Hurry">
+                <p>Astrophysics for People in a Hurry</p>
+            </a>
+            <p>Neil deGrasse Tyson</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://cdn.kobo.com/book-images/299268a4-e02b-4a4b-a7e6-9b06159e1ce2/1200/1200/False/relativity-the-special-and-the-general-theory-1.jpg" alt="Relativity: The Special and the General Theory">
+                <p>Relativity: The Special and the General Theory</p>
+            </a>
+            <p>Albert Einstein</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.XEpdI2wSyauOS9CWm2VRRwHaLj?rs=1&pid=ImgDetMain" alt="The Grand Design">
+                <p>The Grand Design</p>
+            </a>
+            <p>Stephen Hawking</p>
+        </div>
+    </div>
+
+    <h2>Chemistry</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/R.65a1e12b814a23602fffff37a046fe9c?rik=mlW4%2ftx14iaq9w&riu=http%3a%2f%2fimg1.imagesbn.com%2fp%2f9780486646244_p0_v1_s260x420.jpg&ehk=4wmUq14GJUJ5AVuRbEyFF%2bNwgCyB%2btHLVbx7NkFmbcA%3d&risl=&pid=ImgRaw&r=0" alt="The Elements of Chemistry">
+                <p>The Elements of Chemistry</p>
+            </a>
+            <p>Antoine Lavoisier</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://d6y28o6ms9epz.cloudfront.net/uploads/product_image/product_image/104491/9780198769866.jpg" alt="Physical Chemistry">
+                <p>Physical Chemistry</p>
+            </a>
+            <p>Peter Atkins</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://i2.wp.com/chemistry.com.pk/wp-content/uploads/2020/02/Organic-Chemistry-8e-Paula-Yurkanis-Bruice.jpg?fit=767%2C870&ssl=1" alt="Organic Chemistry">
+                <p>Organic Chemistry</p>
+            </a>
+            <p>Paula Yurkanis Bruice</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://m.media-amazon.com/images/I/A1uhhCiiaeL.SL1500.jpg" alt="Chemistry: The Central Science">
+                <p>Chemistry: The Central Science</p>
+            </a>
+            <p>Theodore L. Brown, H. Eugene LeMay</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.FqDLoWbq_ueXQF99rOmOdQAAAA?rs=1&pid=ImgDetMain" alt="Principles of Modern Chemistry">
+                <p>Principles of Modern Chemistry</p>
+            </a>
+            <p>David W. Oxtoby, Laurie J. Butler</p>
+        </div>
+    </div>
+
+    <h2>Biology</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781645178644/on-the-origin-of-species-9781645178644_hr.jpg" alt="The Origin of Species">
+                <p>The Origin of Species</p>
+            </a>
+            <p>Charles Darwin</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://universalbooksellers.com/wp-content/uploads/2023/12/md_9780143422167.jpg" alt="The Gene: An Intimate History">
+                <p>The Gene: An Intimate History</p>
+            </a>
+            <p>Siddhartha Mukherjee</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://bag.webg.club/701d8e9542b048e8a3ef4129c22566c1.jpg" alt="Biology: A Global Approach">
+                <p>Biology: A Global Approach</p>
+            </a>
+            <p>Neil Campbell, Jane Reece</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://newhumanist.org.uk/images/immortal-life-of-henrietta-.jpg" alt="The Immortal Life of Henrietta Lacks">
+                <p>The Immortal Life of Henrietta Lacks</p>
+            </a>
+            <p>Rebecca Skloot</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.dprDcNSq_FawNkIDlUnXvQHaJ4?rs=1&pid=ImgDetMain" alt="The Serengeti Rules">
+                <p>The Serengeti Rules</p>
+            </a>
+            <p>Sean B. Carroll</p>
+        </div>
+    </div>
+
+    <h2>Geography</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://cdn.gramedia.com/uploads/items/_5434_jbyGZmO.jpg" alt="The Geography of Bliss">
+                <p>The Geography of Bliss</p>
+            </a>
+            <p>Eric Weiner</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/R.04ab22200529725ab708580efe489c6f?rik=SmG5oLTnyHDDnQ&riu=http%3a%2f%2fimg2.imagesbn.com%2fp%2f9780812976083_p0_v1_s260x420.jpg&ehk=Zie4xKngkcodsFq5JbawJ3CUmINth5BokA0h13kuMOI%3d&risl=&pid=ImgRaw&r=0" alt="The End of Nature">
+                <p>The End of Nature</p>
+            </a>
+            <p>Bill McKibben</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://peacefieldhistory.com/wp-content/uploads/2021/11/the-power-of-geography-9781982178628_hr.jpg" alt="The Power of Geography">
+                <p>The Power of Geography</p>
+            </a>
+            <p>Tim Marshall</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP._TEQRHmRlD4RJZfzz_I_ZQHaLX?rs=1&pid=ImgDetMain" alt="Land of Seven Rivers">
+                <p>Land of Seven Rivers</p>
+            </a>
+            <p>Sanjeev Sanyal</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.uCajQeyN_tCCCrdo5EgGSAHaJP?rs=1&pid=ImgDetMain" alt="Prisoners of Geography">
+                <p>Prisoners of Geography</p>
+            </a>
+            <p>Tim Marshall</p>
+        </div>
+    </div>
+
+    <h2>History</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.5_t9Aqxh3KlKgdkCHHoSrwHaLh?rs=1&pid=ImgDetMain" alt="History of Medieval India">
+                <p>History of Medieval India</p>
+            </a>
+            <p>Satish Chandra</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://www.trhknih.cz/cover/large/s/p/18y3p22joo2ps.jpg" alt="Europe: A History">
+                <p>Europe: A History</p>
+            </a>
+            <p>Norman Davies</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://cdn01.sapnaonline.com/product_media/9780143031031/md_9780143031031_030820221247419.jpg" alt="Discovery of India">
+                <p>Discovery of India</p>
+            </a>
+            <p>Jawaharlal Nehru</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://m.media-amazon.com/images/I/818gorntorL.SL1500.jpg" alt="Bloodlands: Europe Between Hitler and Stalin">
+                <p>Bloodlands: Europe Between Hitler and Stalin</p>
+            </a>
+            <p>Timothy Snyder</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://m.media-amazon.com/images/I/81Hw+ItlcuL.SL1500.jpg" alt="The Golden Road: How Ancient India Transformed the World">
+                <p>The Golden Road: How Ancient India Transformed the World</p>
+            </a>
+            <p>William Dalrymple</p>
+        </div>
+    </div>
+
+    <h2>Computer Science</h2>
+    <div class="category-slider">
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.drIWtCDrwccR0mFkX79O6QAAAA?rs=1&pid=ImgDetMain" alt="C: Programming - Byron Gottfried">
+                <p>C: Programming - Byron Gottfried</p>
+            </a>
+            <p>Byron Gottfried</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.eq2xIQCKvvVOA6_KVTnYVwHaKK?rs=1&pid=ImgDetMain" alt="C++ Primer">
+                <p>C++ Primer</p>
+            </a>
+            <p>Stanley B. Lippman, Josée Lajoie, Barbara E. Moo</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.-_1LA-86G8zEbH8skIM-cQHaJi?w=1024&h=1319&rs=1&pid=ImgDetMain" alt="Python Crash Course">
+                <p>Python Crash Course</p>
+            </a>
+            <p>Eric Matthes</p>
+        </div>
+        <div class="book">
+            <a href="https://example.com">
+                <img src="https://th.bing.com/th/id/OIP.EU9vQc9D78_2TbFeUU_uWwAAAA?rs=1&pid=ImgDetMain" alt="Java: A Beginner's Guide">
+                <p>Java: A Beginner's Guide</p>
+            </a>
+            <p>Herbert Schildt</p>
+        </div>
+    </div>
+</body>
+</html>

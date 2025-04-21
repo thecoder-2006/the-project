@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parallax AI Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+
+                     /* hero section */
+  
+                     .background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.hero-blur-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+}
+
+.hero-rings-image {
+  /* position: absolute; */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  opacity: 0.4;
+  object-fit: cover;
+}
+
+.hero-icons-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  opacity: 0.5;
+  object-fit: cover;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 41, 0.3);
+}
+    :root {
+      --primary-bg: #0d0d1a;
+      --secondary-bg: #1a1a2e;
+      --accent-color: #a267ff;
+      --text-primary: #e0e7ff;
+      --text-secondary: #a3bffa;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      --transition: 0.3s ease;
+      --code-bg: #1e1e3f;
+      --code-text: #f8f8f2;
+      --line-number-color: #727cf5;
+      --keyword-color: #ff79c6;
+      --string-color: #f1fa8c;
+      --function-color: #50fa7b;
+      --comment-color: #6272a4;
+      --operator-color: #ff79c6;
+      --number-color: #bd93f9;
+      --variable-color: #f8f8f2;
+    }
+
+    [data-theme="light"] {
+      --primary-bg: #f0f4ff;
+      --secondary-bg: #e5eaff;
+      --accent-color: #8542eb;
+      --text-primary: #1a1a2e;
+      --text-secondary: #333366;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --code-bg: #f5f5f5;
+      --code-text: #24292e;
+      --line-number-color: #6e7781;
+      --keyword-color: #d73a49;
+      --string-color: #032f62;
+      --function-color: #6f42c1;
+      --comment-color: #6a737d;
+      --operator-color: #d73a49;
+      --number-color: #005cc5;
+      --variable-color: #24292e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 {
+      color: var(--accent-color);
+      font-size: 2rem;
+      text-shadow: 0 2px 10px rgba(162, 103, 255, 0.3);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .theme-toggle, .clear-chat {
+      background: var(--secondary-bg);
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .theme-toggle:hover, .clear-chat:hover {
+      background: var(--accent-color);
+      color: var(--primary-bg);
+      transform: translateY(-2px);
+    }
+
+    #chatbox {
+      width: 100%;
+      max-width: 900px;
+      background: var(--secondary-bg);
+      padding: 20px;
+      height: 650px; /* Increased height */
+      overflow-y: auto;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      border: 2px solid var(--accent-color);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      scroll-behavior: smooth;
+    }
+
+    .user, .bot {
+      padding: 12px 18px;
+      border-radius: 10px;
+      max-width: 85%;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user {
+      background: #2a4066;
+      color: var(--text-primary);
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot {
+      background: #2e4a62;
+      color: var(--text-primary);
+      align-self: flex-start;
+      text-align: left;
+    }
+
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 10px;
+    }
+
+    .typing span {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      display: inline-block;
+      animation: bounce 1.3s linear infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* Enhanced Code Editor Style */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 15px 0 15px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.9rem;
+      margin: 15px 0;
+      position: relative;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+    }
+
+    pre:before {
+      content: "";
+      height: 25px;
+      background: linear-gradient(90deg, #ff5f56 0%, #ff5f56 33%, #ffbd2e 33%, #ffbd2e 66%, #27c93f 66%, #27c93f 100%);
+      display: block;
+      border-radius: 8px 8px 0 0;
+      margin-top: -15px;
+      position: relative;
+    }
+
+    pre:after {
+      content: attr(data-language);
+      position: absolute;
+      top: 4px;
+      right: 10px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    pre code {
+      display: block;
+      counter-reset: line;
+      padding: 10px 0;
+      color: var(--code-text);
+      line-height: 1.5;
+    }
+
+    pre code > span {
+      display: block;
+      padding: 0 15px 0 50px;
+      position: relative;
+      white-space: pre;
+    }
+
+    pre code > span:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    pre code > span:before {
+      counter-increment: line;
+      content: counter(line);
+      position: absolute;
+      left: 0;
+      width: 40px;
+      text-align: right;
+      color: var(--line-number-color);
+      opacity: 0.6;
+      user-select: none;
+    }
+
+    .keyword {
+      color: var(--keyword-color);
+      font-weight: bold;
+    }
+
+    .string {
+      color: var(--string-color);
+    }
+
+    .function {
+      color: var(--function-color);
+    }
+
+    .comment {
+      color: var(--comment-color);
+      font-style: italic;
+    }
+
+    .operator {
+      color: var(--operator-color);
+    }
+
+    .number {
+      color: var(--number-color);
+    }
+
+    .variable {
+      color: var(--variable-color);
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-primary);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    pre:hover .copy-btn {
+      opacity: 1;
+    }
+
+    .copy-success {
+      background: #27c93f !important;
+    }
+
+    #inputArea {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 45px 12px 12px;
+      font-size: 16px;
+      border: 2px solid var(--accent-color);
+      border-radius: 10px;
+      background: var(--secondary-bg);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    input[type="text"]:focus {
+      border-color: #8a4aff;
+    }
+
+    .mic-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--accent-color);
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .mic-btn:hover {
+      color: #8a4aff;
+    }
+
+    .mic-active {
+      color: #ff4a4a;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: var(--accent-color);
+      color: var(--primary-bg);
+      border: none;
+      border-radius: 10px;
+      transition: background var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: #8a4aff;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 10px rgba(162, 103, 255, 0.4);
+    }
+
+    .sample-queries {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .query-pill {
+      background: var(--secondary-bg);
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      border-radius: 20px;
+      padding: 8px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .query-pill:hover {
+      background: var(--accent-color);
+      color: var(--primary-bg);
+      transform: translateY(-2px);
+    }
+
+    #chatbox::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chatbox::-webkit-scrollbar-track {
+      background: var(--secondary-bg);
+      border-radius: 10px;
+    }
+
+    #chatbox::-webkit-scrollbar-thumb {
+      background: var(--accent-color);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      #chatbox {
+        height: 500px;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      #inputArea {
+        flex-direction: column;
+      }
+      button.send-btn {
+        width: 100%;
+      }
+      .sample-queries {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .query-pill {
+        text-align: center;
+      }
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <div class="logo">
+      <h2>PARALLAX AI 🤖</h2>
+    </div>
+    <div class="controls">
+      <button class="theme-toggle" title="Toggle theme">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="clear-chat" title="Clear chat">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </header>
+                 <!-- // Hero Section -->
+
+  <div class="background-container">
+    <img class="hero-blur-image" src="images/hero blur img.png" alt="Hero Blur" onerror="this.style.display='none'">
+    <img class="hero-icons-image parallax" data-speed="4" src="images/hero icons img.png" alt="Hero Icons" onerror="this.style.display='none'">
+    <img class="hero-rings-image" src="images/hero rings icon.png" alt="Hero Rings" onerror="this.style.display='none'">
+    <div class="background-overlay"></div>
+  </div>
+
+  <div id="chatbox">
+    <div class="bot">
+      Hello! I'm Parallax AI, your doubt solving assistant. Ask me anything about your doubt, queries and I'll help with examples and explanations! 👨‍💻
+    </div>
+  </div>
+
+  <div id="inputArea">
+    <div class="input-wrapper">
+      <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off" />
+      <button class="mic-btn" title="Voice input">
+        <i class="fas fa-microphone"></i>
+      </button>
+    </div>
+    <button class="send-btn" onclick="sendMessage()">
+      <i class="fas fa-paper-plane"></i> Send
+    </button>
+  </div>
+
+  <div class="sample-queries">
+    <div class="query-pill">How do I solve a quadratic equation step by step?</div>
+    <div class="query-pill">Write a Python function to sort a list</div>
+    <div class="query-pill">Explain React hooks</div>
+    <div class="query-pill">What is the difference between mitosis and meiosis?</div>
+  </div>
+
+  <script>
+    const API_KEY = "AIzaSyDsFojbwdTt2SxfgNXc1ct30qAf6tq0O_s";
+    let isDarkMode = true;
+    let recognition;
+    
+    // Initialize speech recognition if available
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+        toggleMic(); // Turn off mic
+        
+        // Auto send message after voice recognition completes
+        sendMessage();
+      };
+      
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error', event);
+        toggleMic(); // Turn off mic
+      };
+    }
+
+    // Enter key press
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    // Theme toggle
+    document.querySelector('.theme-toggle').addEventListener('click', function() {
+      const themeIcon = this.querySelector('i');
+      if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+      isDarkMode = !isDarkMode;
+    });
+
+    // Clear chat
+    document.querySelector('.clear-chat').addEventListener('click', function() {
+      const chatbox = document.getElementById("chatbox");
+      chatbox.innerHTML = `
+        <div class="bot">
+          Hello! I'm Parallax AI, your doubt solving assistant. Ask me anything about your doubt, queries and I'll help with examples and explanations! 👨‍💻
+        </div>
+      `;
+    });
+
+    // Voice input
+    document.querySelector('.mic-btn').addEventListener('click', toggleMic);
+
+    function toggleMic() {
+      const micBtn = document.querySelector('.mic-btn i');
+      
+      if (!recognition) {
+        alert('Speech recognition is not supported in your browser.');
+        return;
+      }
+      
+      if (micBtn.parentElement.classList.contains('mic-active')) {
+        recognition.stop();
+        micBtn.parentElement.classList.remove('mic-active');
+      } else {
+        recognition.start();
+        micBtn.parentElement.classList.add('mic-active');
+      }
+    }
+
+    // Sample queries
+    document.querySelectorAll('.query-pill').forEach(pill => {
+      pill.addEventListener('click', function() {
+        document.getElementById("userInput").value = this.textContent;
+        sendMessage();
+      });
+    });
+
+    // Copy code functionality
+    function setupCodeCopyButtons() {
+      document.querySelectorAll('pre').forEach(pre => {
+        // Remove any existing copy buttons
+        const existingBtn = pre.querySelector('.copy-btn');
+        if (existingBtn) existingBtn.remove();
+        
+        // Create new copy button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.addEventListener('click', function() {
+          const code = pre.querySelector('code').innerText;
+          navigator.clipboard.writeText(code).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('copy-success');
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+              copyBtn.classList.remove('copy-success');
+            }, 2000);
+          });
+        });
+        pre.appendChild(copyBtn);
+      });
+    }
+
+    // Function to format code with syntax highlighting
+    function formatCode(text) {
+      return text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        // Determine language for display
+        const displayLang = lang || 'text';
+        
+        // Apply syntax highlighting
+        let highlightedCode = highlightSyntax(code, lang);
+        
+        // Format the code into lines with line numbers
+        let lines = highlightedCode.split('\n');
+        let formattedLines = lines.map(line => `<span>${line}</span>`).join('');
+        
+        return `<pre data-language="${displayLang}"><code>${formattedLines}</code></pre>`;
+      }).replace(/\n/g, "<br>");
+    }
+
+    // Enhanced syntax highlighter function
+    function highlightSyntax(code, language) {
+      // This is a more comprehensive implementation
+      let highlighted = code;
+      
+      // Process code based on language
+      if (language === 'javascript' || language === 'js') {
+        // Keywords
+        highlighted = highlighted.replace(/(const|let|var|function|return|if|else|for|while|class|import|export|from|async|await|break|case|catch|continue|debugger|default|delete|do|extends|finally|in|instanceof|new|switch|this|throw|try|typeof|void|with|yield)\b/g, '<span class="keyword">$1</span>');
+        // Strings
+        highlighted = highlighted.replace(/(["'`])(.*?)\1/g, '<span class="string">$1$2$1</span>');
+        // Numbers
+        highlighted = highlighted.replace(/\b(\d+\.?\d*|\.\d+)\b/g, '<span class="number">$1</span>');
+        // Functions
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()/g, '<span class="function">$1</span>');
+        // Comments - single line
+        highlighted = highlighted.replace(/(\/\/.*)/g, '<span class="comment">$1</span>');
+        // Comments - multi line (basic implementation)
+        highlighted = highlighted.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="comment">$1</span>');
+        // Operators
+        highlighted = highlighted.replace(/([=+\-*/%&|^!<>]+)/g, '<span class="operator">$1</span>');
+        // Boolean
+        highlighted = highlighted.replace(/\b(true|false|null|undefined)\b/g, '<span class="keyword">$1</span>');
+      } else if (language === 'python' || language === 'py') {
+        // Keywords
+        highlighted = highlighted.replace(/(def|class|import|from|as|return|if|elif|else|for|while|in|try|except|finally|with|not|and|or|lambda|True|False|None|nonlocal|global|pass|break|continue|assert|raise|yield)\b/g, '<span class="keyword">$1</span>');
+        // Strings
+        highlighted = highlighted.replace(/(["'`])(.*?)\1/g, '<span class="string">$1$2$1</span>');
+        // Triple-quoted strings (basic)
+        highlighted = highlighted.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g, '<span class="string">$1</span>');
+        // Numbers
+        highlighted = highlighted.replace(/\b(\d+\.?\d*|\.\d+)\b/g, '<span class="number">$1</span>');
+        // Functions
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()/g, '<span class="function">$1</span>');
+        // Comments
+        highlighted = highlighted.replace(/(#.*)/g, '<span class="comment">$1</span>');
+        // Decorators
+        highlighted = highlighted.replace(/(@\w+)/g, '<span class="keyword">$1</span>');
+      } else if (language === 'html') {
+        // Tags
+        highlighted = highlighted.replace(/(&lt;[\/]?\w+)(\s.*?)?(&gt;)/g, '<span class="keyword">$1</span>$2<span class="keyword">$3</span>');
+        // Attributes
+        highlighted = highlighted.replace(/(\s\w+)=["'](.*?)["']/g, '<span class="function">$1</span>=<span class="string">"$2"</span>');
+        // Comments
+        highlighted = highlighted.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+      } else if (language === 'css') {
+        // Selectors
+        highlighted = highlighted.replace(/([^\{\}]+)(?=\s*\{)/g, '<span class="function">$1</span>');
+        // Properties
+        highlighted = highlighted.replace(/([\w-]+)(?=\s*:)/g, '<span class="keyword">$1</span>');
+        // Values
+        highlighted = highlighted.replace(/:\s*([^;]+);/g, ': <span class="string">$1</span>;');
+        // Comments
+        highlighted = highlighted.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="comment">$1</span>');
+        // Units
+        highlighted = highlighted.replace(/(\d+)(px|em|rem|%|vh|vw|deg|s|ms)/g, '<span class="number">$1</span>$2');
+      } else if (language === 'json') {
+        // Keys
+        highlighted = highlighted.replace(/("[\w\s]+")\s*:/g, '<span class="function">$1</span>:');
+        // Strings
+        highlighted = highlighted.replace(/:\s*(".*?")/g, ': <span class="string">$1</span>');
+        // Numbers
+        highlighted = highlighted.replace(/:\s*(\d+\.?\d*|\.\d+)/g, ': <span class="number">$1</span>');
+        // Boolean
+        highlighted = highlighted.replace(/:\s*(true|false|null)/g, ': <span class="keyword">$1</span>');
+      } else if (language === 'sql') {
+        // Keywords
+        highlighted = highlighted.replace(/(SELECT|FROM|WHERE|AND|OR|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|JOIN|LEFT|RIGHT|INNER|OUTER|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|AS|ON|CASE|WHEN|THEN|ELSE|END|IS|NULL|NOT|DISTINCT|COUNT|SUM|AVG|MIN|MAX|IN|BETWEEN|LIKE|ASC|DESC)\b/gi, match => `<span class="keyword">${match}</span>`);
+        // Strings
+        highlighted = highlighted.replace(/(["'`])(.*?)\1/g, '<span class="string">$1$2$1</span>');
+        // Numbers
+        highlighted = highlighted.replace(/\b(\d+\.?\d*|\.\d+)\b/g, '<span class="number">$1</span>');
+        // Comments
+        highlighted = highlighted.replace(/(--.*)/g, '<span class="comment">$1</span>');
+        // Functions
+        highlighted = highlighted.replace(/(\w+)(?=\s*\()/g, '<span class="function">$1</span>');
+      }
+      
+      return highlighted;
+    }
+
+    function addTypingIndicator() {
+      const chatbox = document.getElementById("chatbox");
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'bot typing';
+      typingDiv.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+      `;
+      chatbox.appendChild(typingDiv);
+      chatbox.scrollTop = chatbox.scrollHeight;
+      return typingDiv;
+    }
+
+    function removeTypingIndicator(element) {
+      if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
+    }
+
+    async function typeText(element, text, speed = 15) {
+      let i = 0;
+      const formattedText = formatCode(text);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = formattedText;
+      const plainText = tempDiv.textContent;
+      
+      element.innerHTML = '';
+      
+      function type() {
+        if (i < plainText.length) {
+          element.innerHTML += plainText.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else {
+          // Once typing is complete, replace with fully formatted text
+          element.innerHTML = formattedText;
+          // Setup copy buttons for code blocks
+          setupCodeCopyButtons();
+        }
+      }
+      
+      type();
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chatbox = document.getElementById("chatbox");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      // Show user message
+      chatbox.innerHTML += `<div class="user">You: ${userMessage}</div>`;
+      input.value = "";
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Add typing indicator
+      const typingIndicator = addTypingIndicator();
+
+      // Gemini API Call
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+      const data = {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: "You are a helpful AI that clear various doubts, explain, and answer questions. Be clear. When answering coding questions, provide well-formatted code with proper syntax highlighting. Format your explanations with clear structure." }]
+          },
+          {
+            role: "user",
+            parts: [{ text: userMessage }]
+          }
+        ]
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't understand that.";
+        
+        // Remove typing indicator
+        removeTypingIndicator(typingIndicator);
+        
+        // Create bot message element
+        const botMessage = document.createElement("div");
+        botMessage.className = "bot";
+        botMessage.innerHTML = "Parallax AI: ";
+        chatbox.appendChild(botMessage);
+        
+        // Animate typing effect
+        await typeText(botMessage, reply);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      } catch (err) {
+        removeTypingIndicator(typingIndicator);
+        chatbox.innerHTML += `<div class="bot">Parallax AI: Error talking to server.</div>`;
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }
+    }
+
+    // Add welcome animation
+    window.addEventListener('load', function() {
+      const botMessage = document.querySelector('.bot');
+      botMessage.style.opacity = '0';
+      botMessage.style.transform = 'translateY(10px)';
+      
+      setTimeout(() => {
+        botMessage.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        botMessage.style.opacity = '1';
+        botMessage.style.transform = 'translateY(0)';
+      }, 300);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Colleges Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="engineering.js" defer></script>
+    
+    <style>
+        :root {
+            --main-bg-color: #0a192f;
+            --card-bg-color: #112240;
+            --accent-color: #64ffda;
+            --text-primary: #e6f1ff;
+            --text-secondary: #a8b2d1;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            position: relative;
+            background-image: url('https://media.architecturaldigest.com/photos/5bdc8f277c86c80e83b4b447/master/pass/Tout-Dartmouth.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: var(--main-bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background-color var(--transition-speed);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.7);
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin: 30px 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent-color);
+            animation: expandWidth 1.5s ease-out forwards;
+        }
+
+        .search-box {
+            text-align: center;
+            margin: 30px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(17, 34, 64, 0.7);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            animation: fadeIn 1s ease-out;
+        }
+
+        input[type="text"],
+        select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #233554;
+            border-radius: 8px;
+            background-color: #172a45;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            transition: all var(--transition-speed);
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.3);
+        }
+
+        .category {
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(17, 34, 64, 0.7);
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+        }
+
+        .category h2 {
+            color: var(--accent-color);
+            text-align: left;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .category h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 24px;
+            background-color: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        .college-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--main-bg-color);
+            scroll-behavior: smooth;
+        }
+
+        .college-scroll::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .college-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        .college-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .college-box {
+            flex: 0 0 auto;
+            width: 150px;
+            height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 10px;
+        }
+
+        .college-box:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .college-box img {
+            width: 130px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .college-box p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .college-box a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 12px;
+        }
+
+        .state-filter {
+            display: none;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        function filterColleges() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const mainFilter = document.getElementById('collegeFilter').value;
+            const stateFilter = document.getElementById('stateFilter').value;
+            const boxes = document.getElementsByClassName('college-box');
+            const categories = document.getElementsByClassName('category');
+
+            for (const category of categories) {
+                category.style.display = 'none';
+            }
+
+            for (const box of boxes) {
+                const text = box.textContent.toLowerCase();
+                const category = box.getAttribute('data-category');
+                const state = box.getAttribute('data-state') || '';
+
+                const categoryMatch = (mainFilter === 'all' || category === mainFilter);
+                const stateMatch = (mainFilter !== 'state' || stateFilter === 'all' || state === stateFilter);
+                const searchMatch = text.includes(input);
+
+                if (categoryMatch && stateMatch && searchMatch) {
+                    box.style.display = '';
+                    const categorySection = box.closest('.category');
+                    if (categorySection) {
+                        categorySection.style.display = '';
+                    }
+                } else {
+                    box.style.display = 'none';
+                }
+            }
+        }
+
+        function toggleStateFilter() {
+            const mainFilter = document.getElementById('collegeFilter').value;
+            const stateFilterDiv = document.getElementById('stateFilterContainer');
+            stateFilterDiv.style.display = mainFilter === 'state' ? 'block' : 'none';
+            if (mainFilter !== 'state') document.getElementById('stateFilter').value = 'all';
+            filterColleges();
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Indian Colleges Directory</h1>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search colleges..." onkeyup="filterColleges()">
+        <select id="collegeFilter" onchange="toggleStateFilter()">
+            <option value="all">All Colleges</option>
+            <option value="iit">IITs</option>
+            <option value="nit">NITs</option>
+            <option value="gfti">GFTIs</option>
+            <option value="state">State Colleges</option>
+        </select>
+    </div>
+
+    <div class="state-filter" id="stateFilterContainer">
+        <select id="stateFilter" onchange="filterColleges()">
+            <option value="all">All States</option>
+            <option value="andhra-pradesh">Andhra Pradesh</option>
+            <option value="arunachal-pradesh">Arunachal Pradesh</option>
+            <option value="assam">Assam</option>
+            <option value="bihar">Bihar</option>
+            <option value="chhattisgarh">Chhattisgarh</option>
+            <option value="goa">Goa</option>
+            <option value="gujarat">Gujarat</option>
+            <option value="haryana">Haryana</option>
+            <option value="himachal-pradesh">Himachal Pradesh</option>
+            <option value="jharkhand">Jharkhand</option>
+            <option value="karnataka">Karnataka</option>
+            <option value="kerala">Kerala</option>
+            <option value="madhya-pradesh">Madhya Pradesh</option>
+            <option value="maharashtra">Maharashtra</option>
+            <option value="manipur">Manipur</option>
+            <option value="meghalaya">Meghalaya</option>
+            <option value="mizoram">Mizoram</option>
+            <option value="nagaland">Nagaland</option>
+            <option value="odisha">Odisha</option>
+            <option value="punjab">Punjab</option>
+            <option value="rajasthan">Rajasthan</option>
+            <option value="sikkim">Sikkim</option>
+            <option value="tamil-nadu">Tamil Nadu</option>
+            <option value="telangana">Telangana</option>
+            <option value="tripura">Tripura</option>
+            <option value="uttar-pradesh">Uttar Pradesh</option>
+            <option value="uttarakhand">Uttarakhand</option>
+            <option value="west-bengal">West Bengal</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <h2>Indian Institute of Technology</h2>
+        <div class="college-scroll">
+            <div class="college-box" data-category="iit">
+                <a href="" target="_blank">
+                    <img src="https://static.theprint.in/wp-content/uploads/2022/08/IIT-Bombay-main-building.jpg"
+                        alt="IIT Bombay">
+                </a>
+                <p>IIT Bombay</p>
+                <p>Mumbai, Maharashtra</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="" target="_blank">
+                    <img src="https://imgk.timesnownews.com/story/IIT_Delhi_6.jpg" alt="IIT Delhi">
+                </a>
+                <p>IIT Delhi</p>
+                <p>New Delhi, Delhi</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitm.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.xBNv88kF_3zWyl_zauiunAHaEK?rs=1&pid=ImgDetMain"
+                        alt="IIT Madras">
+                </a>
+                <p>IIT Madras</p>
+                <p>Chennai, Tamil Nadu</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitk.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/R.ef6e69686d81da6f7a5df1a00ac866fc?rik=47kSqN19Uo1c7A&riu=http%3a%2f%2fassets.skyfilabs.com%2fimages%2fblog%2fcampusexploration-iitk.JPG&ehk=8Mz51Oe0pcrYZtboO6FIQYEBi%2flStyMtkopWRNIMmZQ%3d&risl=1&pid=ImgRaw&r=0"
+                        alt="IIT Kanpur">
+                </a>
+                <p>IIT Kanpur</p>
+                <p>Kanpur, Uttar Pradesh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitkgp.ac.in" target="_blank">
+                    <img src="https://wallpaperaccess.com/full/5824844.jpg" alt="IIT kharagpur">
+                </a>
+                <p>IIT Kharagpur</p>
+                <p>Kharagpur, West Bengal</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitr.ac.in" target="_blank">
+                    <img src="https://bl-i.thgim.com/public/news/xe4vo3/article66182896.ece/alternates/LANDSCAPE_1200/IIT%20Roorkee%20Campus.jpeg"
+                        alt="IIT Roorkee">
+                </a>
+                <p>IIT Roorkee</p>
+                <p>Roorkee, Uttarakhand</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitg.ac.in" target="_blank">
+                    <img src="https://3.bp.blogspot.com/-vvHGODwa1DI/Txw5JqnKvDI/AAAAAAAAE_Q/pB3Oa5zy3Xg/s1600/5d6dfe1025951ec813553ea4b2332f9c_52605.jpg"
+                        alt="IIT Guwahati">
+                </a>
+                <p>IIT Guwahati</p>
+                <p>Guwahati, Assam</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitrpr.ac.in" target="_blank">
+                    <img src="https://images.indianexpress.com/2019/12/JP04IIT-Ropar-05_759.jpg?resize=600"
+                        alt="IIT Ropar">
+                </a>
+                <p>IIT Ropar</p>
+                <p>Rupnagar, Punjab</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitbbs.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.-FN23nQCM1IR2Tl1rPcRtQHaDb?rs=1&pid=ImgDetMain"
+                        alt="IIT Bhubaneswar">
+                </a>
+                <p>IIT Bhubaneswar</p>
+                <p>Bhubaneswar, Odisha</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitgn.ac.in" target="_blank">
+                    <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202007/IIT_Gandhinagar.jpeg?5_w4zhIS5.TN5tu5FPqWFbjzidmdQNuJ&size=770:433"
+                        alt="IIT Gandhinagar">
+                </a>
+                <p>IIT Gandhinagar</p>
+                <p>Gandhinagar, Gujarat</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iith.ac.in" target="_blank">
+                    <img src="https://iith.ac.in/assets/images/towers/tower2.jpg" alt="IIT Hyderabad">
+                </a>
+                <p>IIT Hyderabad</p>
+                <p>Hyderabad, Telangana</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitj.ac.in" target="_blank">
+                    <img src="https://i.ytimg.com/vi/kWHcMeE4C5M/maxresdefault.jpg" alt="IIT Jodhpur">
+                </a>
+                <p>IIT Jodhpur</p>
+                <p>Jodhpur, Rajasthan</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitp.ac.in" target="_blank">
+                    <img src="https://images.shiksha.com/mediadata/images/articles/1609906795phpj27pLU.jpeg"
+                        alt="IIT Patna">
+                </a>
+                <p>IIT Patna</p>
+                <p>Patna, Bihar</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iiti.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.L39zo6tjaALm37pKd2eb7QHaEr?rs=1&pid=ImgDetMain"
+                        alt="IIT Indore">
+                </a>
+                <p>IIT Indore</p>
+                <p>Indore, Madhya Pradesh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitmandi.ac.in" target="_blank">
+                    <img src="https://img.republicworld.com/rimages/IITMandi-170193824353816_9.webp" alt="IIT Mandi">
+                </a>
+                <p>IIT Mandi</p>
+                <p>Mandi, Himachal Pradesh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitbhu.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.YbcMF3vqxq7do1Yn63HLQgHaHa?rs=1&pid=ImgDetMain"
+                        alt="IIT Varanasi (BHU)">
+                </a>
+                <p>IIT Varanasi (BHU)</p>
+                <p>Varanasi, Uttar Pradesh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitpkd.ac.in" target="_blank">
+                    <img src="https://img.jagranjosh.com/images/2022/April/1242022/dsc02671_0.jpg" alt="IIT Palakkad">
+                </a>
+                <p>IIT Palakkad</p>
+                <p>Palakkad, Kerala</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iittp.ac.in" target="_blank">
+                    <img src="https://i.ytimg.com/vi/0ha8fyA4r04/maxresdefault.jpg" alt="IIT Tirupati">
+                </a>
+                <p>IIT Tirupati</p>
+                <p>Tirupati, Andhra Pradesh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitgoa.ac.in" target="_blank">
+                    <img src="https://i.ytimg.com/vi/Ru8ISR0sraY/maxresdefault.jpg" alt="IIT Goa">
+                </a>
+                <p>IIT Goa</p>
+                <p>Ponda, Goa</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitbhilai.ac.in" target="_blank">
+                    <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/1255/2018/1/31/indian-institute-of-technology-bhilai0.JPG"
+                        alt="IIT Bhilai">
+                </a>
+                <p>IIT Bhilai</p>
+                <p>Bhilai, Chhattisgarh</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitjammu.ac.in" target="_blank">
+                    <img src="https://iitjammu.ac.in/cvip2023/images/slider/slider1.jpg" alt="IIT Jammu">
+                </a>
+                <p>IIT Jammu</p>
+                <p>Jammu, Jammu & Kashmir</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitism.ac.in" target="_blank">
+                    <img src="https://images.shiksha.com/mediadata/images/articles/1635919891phpErjqCl.jpeg"
+                        alt="IIT ISM Dhanbad">
+                </a>
+                <p>IIT ISM Dhanbad</p>
+                <p>Dhanbad, Jharkhand</p>
+            </div>
+            <div class="college-box" data-category="iit">
+                <a href="https://www.iitdh.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP._LAeEz7wZyits3su1sFUfgHaEK?rs=1&pid=ImgDetMain"
+                        alt="IIT Dharwad">
+                </a>
+                <p>IIT Dharwad</p>
+                <p>Dharwad, Karnataka</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>National Institute of Technology</h2>
+        <div class="college-scroll">
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitt.edu/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.U-VGKjm0WDEeug9AeQOerAHaEK?rs=1&pid=ImgDetMain"
+                        alt="NIT Trichy">
+                    <p>NIT Trichy</p>
+                </a>
+                <p>Tamil Nadu</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitk.ac.in/" target="_blank">
+                    <img src="https://files.askiitians.com/cdn1/images/2015430-184458118-3624-01.jpg"
+                        alt="NIT Surathkal">
+                    <p>NIT Surathkal</p>
+                </a>
+                <p>Karnataka</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitrkl.ac.in/" target="_blank">
+                    <img src="https://media.getmyuni.com/reviews/13392__3115/14534628029.jpg" alt="NIT Rourkela">
+                    <p>NIT Rourkela</p>
+                </a>
+                <p>Odisha</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitw.ac.in/" target="_blank">
+                    <img src="https://images.collegedunia.com/public/image/NIT_warangal_e37c195994eb7e6be894881f6e62a468.jpeg?tr=w-500,h-500,c-force"
+                        alt="NIT Warangal">
+                    <p>NIT Warangal</p>
+                </a>
+                <p>Telangana</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitc.ac.in/" target="_blank">
+                    <img src="https://img.jagranjosh.com/imported/images/E/Articles/nitcalicut.jpg" alt="NIT Calicut">
+                    <p>NIT Calicut</p>
+                </a>
+                <p>Kerala</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://vnit.ac.in/" target="_blank">
+                    <img src="https://files.askiitians.com/cdn1/images/2015427-175912214-4605-14091298011.jpg"
+                        alt="VNIT Nagpur">
+                    <p>VNIT Nagpur</p>
+                </a>
+                <p>Maharashtra</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitdgp.ac.in/" target="_blank">
+                    <img src="https://www.admissionfever.com/Media/clgimg/gallery/3460_img8279758984887478.png"
+                        alt="NIT Durgapur">
+                    <p>NIT Durgapur</p>
+                </a>
+                <p>West Bengal</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nits.ac.in/" target="_blank">
+                    <img src="https://images.hindustantimes.com/img/2021/06/12/1600x900/NIT_Silchar_1623479240316_1623479252024.jpg"
+                        alt="NIT Silchar">
+                    <p>NIT Silchar</p>
+                </a>
+                <p>Assam</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://mnit.ac.in/" target="_blank">
+                    <img src="https://mnit.ac.in/students/images/mnit_infrastructure_photos_15.jpg" alt="MNIT Jaipur">
+                    <p>MNIT Jaipur</p>
+                </a>
+                <p>Rajasthan</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.mnnit.ac.in/" target="_blank">
+                    <img src="https://www.addressguru.in/images/1628682373.jpeg" alt="MNNIT Allahabad">
+                    <p>MNNIT Allahabad</p>
+                </a>
+                <p>Uttar Pradesh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitjsr.ac.in/" target="_blank">
+                    <img src="https://files.askiitians.com/cdn1/cms-content/collegenit-jamshedpur_1.jpg"
+                        alt="NIT Jamshedpur">
+                    <p>NIT Jamshedpur</p>
+                </a>
+                <p>Jharkhand</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitkkr.ac.in/" target="_blank">
+                    <img src="https://files.askiitians.com/cdn1/images/2015427-151353863-8737-img_2.jpg"
+                        alt="NIT Kurukshetra">
+                    <p>NIT Kurukshetra</p>
+                </a>
+                <p>Haryana</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nith.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.01Is-XFTxWaV2RlTHzaSLAHaEc?rs=1&pid=ImgDetMain"
+                        alt="NIT Hamirpur">
+                    <p>NIT Hamirpur</p>
+                </a>
+                <p>Himachal Pradesh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.manit.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.zJ7XfaV6G-tyFWIvALHUHAHaGQ?rs=1&pid=ImgDetMain"
+                        alt="MANIT Bhopal">
+                    <p>MANIT Bhopal</p>
+                </a>
+                <p>Madhya Pradesh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitsri.ac.in/" target="_blank">
+                    <img src="https://www.scrolldroll.com/wp-content/uploads/2015/11/NIT-Srinagar-3-1024x683.jpg"
+                        alt="NIT Srinagar">
+                    <p>NIT Srinagar</p>
+                </a>
+                <p>Jammu & Kashmir</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nita.ac.in/" target="_blank">
+                    <img src="https://nita.ac.in/images/1.jpg" alt="NIT Agartala">
+                    <p>NIT Agartala</p>
+                </a>
+                <p>Tripura</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitm.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.p77FEnlb9105vbiahHO-BQHaCr?rs=1&pid=ImgDetMain"
+                        alt="NIT Meghalaya">
+                    <p>NIT Meghalaya</p>
+                </a>
+                <p>Meghalaya</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitmz.ac.in/" target="_blank">
+                    <img src="https://www.credenc.com/images/colleges/national-institute-of-technology-nit-mizoram-aizawl.jpg"
+                        alt="NIT Mizoram">
+                    <p>NIT Mizoram</p>
+                </a>
+                <p>Mizoram</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitap.ac.in/" target="_blank">
+                    <img src="https://www.vidyavision.com/CollegeUploads/Photos/2022-22-6-13-38-44_NIT%20595%20P.jpg"
+                        alt="NIT Arunachal Pradesh">
+                    <p>NIT Arunachal Pradesh</p>
+                </a>
+                <p>Arunachal Pradesh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitsikkim.ac.in/" target="_blank">
+                    <img src="https://www.vidyavision.com/CollegeUploads/Photos/2022-20-6-14-11-21_NIT%20622%20P.jpg"
+                        alt="NIT Sikkim">
+                    <p>NIT Sikkim</p>
+                </a>
+                <p>Sikkim</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitgoa.ac.in/" target="_blank">
+                    <img src="https://static.toiimg.com/thumb/msid-96271168,imgsize-962791,width-400,resizemode-4/96271168.jpg"
+                        alt="NIT Goa">
+                    <p>NIT Goa</p>
+                </a>
+                <p>Goa</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitmanipur.ac.in/" target="_blank">
+                    <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/127/2018/10/9/Campus%20View%20of%20National%20Institute%20of%20Technology%20Manipur_Campus-View.jpg"
+                        alt="NIT Manipur">
+                    <p>NIT Manipur</p>
+                </a>
+                <p>Manipur</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nituk.ac.in/" target="_blank">
+                    <img src="https://img.jagranjosh.com/images/2022/April/1842022/11062077_845829555507062_4480370264872831979_o.jpg"
+                        alt="NIT Uttarakhand">
+                    <p>NIT Uttarakhand</p>
+                </a>
+                <p>Uttarakhand</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitdelhi.ac.in/" target="_blank">
+                    <img src="https://www.guidanceforever.org/wp-content/uploads/2023/10/national-institute-of-technology-delhi-featured.jpg"
+                        alt="NIT Delhi">
+                    <p>NIT Delhi</p>
+                </a>
+                <p>Delhi</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitp.ac.in/" target="_blank">
+                    <img src="https://universitykart.com/Content/upload/admin/y3333ni1.owk.jpg" alt="NIT Patna">
+                    <p>NIT Patna</p>
+                </a>
+                <p>Bihar</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitrr.ac.in/" target="_blank">
+                    <img src="https://gyaanarth.com/wp-content/uploads/2022/07/1607331935php7vaw4G.jpg"
+                        alt="NIT Raipur">
+                    <p>NIT Raipur</p>
+                </a>
+                <p>Chhattisgarh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitandhra.ac.in/" target="_blank">
+                    <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/1343/2017/11/2/NIT1.jpg"
+                        alt="NIT Andhra Pradesh">
+                    <p>NIT Andhra Pradesh</p>
+                </a>
+                <p>Andhra Pradesh</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitpy.ac.in/" target="_blank">
+                    <img src="https://www.vidyavision.com/CollegeUploads/Photos/2017-23-5-14-20-02_nit-puduchery1.jpg"
+                        alt="NIT Puducherry">
+                    <p>NIT Puducherry</p>
+                </a>
+                <p>Puducherry</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://nitnagaland.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.bEH2Y19BceQleQfutP54eAHaCc?rs=1&pid=ImgDetMain"
+                        alt="NIT Nagaland">
+                    <p>NIT Nagaland</p>
+                </a>
+                <p>Nagaland</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.nitj.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.CXg32cK9Q3V__xAO2_vijgHaDf?rs=1&pid=ImgDetMain"
+                        alt="NIT Jalandhar">
+                    <p>NIT Jalandhar</p>
+                </a>
+                <p>Punjab</p>
+            </div>
+            <div class="college-box" data-category="nit">
+                <a href="https://www.iiests.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/R.2efad29af9409e38ee791c43adaa3beb?rik=R2ubW8G6ApIzKA&riu=http%3a%2f%2fphotos.wikimapia.org%2fp%2f00%2f03%2f84%2f14%2f20_full.jpg&ehk=F0uYX6cBPNO8oE9fUr5wv3qOHx8Eue6XtvP7oqNScJ4%3d&risl=&pid=ImgRaw&r=0"
+                        alt="IIEST Shibpur">
+                    <p>IIEST Shibpur</p>
+                </a>
+                <p>West Bengal</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>Government-Funded Technical Institutes</h2>
+        <div class="college-scroll">
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/R.e833c496bf75e3f082fd0cac36ebf611?rik=LjhMKvZICS6Jlg&riu=http%3a%2f%2fwww.onlineresultportal.com%2fimages%2funiversity%2fassam-university.jpg&ehk=OLKSuxduRoHGrWf%2bHXIJfJdBD84Fa6fSdLukEzvufuY%3d&risl=&pid=ImgRaw&r=0"
+                    alt="Assam University">
+                <p>Assam University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://www.campusoption.com/images/colleges/gallery/17_05_16_021534_413089-bit-mesra-website.jpg"
+                    alt="BIT Mesra">
+                <p>BIT Mesra</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.GP_C5QM6CRIo-qLS5j1_ygHaE5?rs=1&pid=ImgDetMain"
+                    alt="NIFFT Ranchi">
+                <p>NIFFT Ranchi</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/R.a14f4992ccab88faa7c83470fb21337d?rik=o6ACMb7moA9FTQ&riu=http%3a%2f%2fsliet.ac.in%2fsilver-jublee%2fimages%2fadmin-block.jpg&ehk=Mnpz3rvrFEfWEyoTDWR1RZAiCRtXMrkhojzgTcQM65w%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
+                    alt="SLIET Longowal">
+                <p>SLIET Longowal</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://www.admissionfever.com/Media/clgimg/gallery/3929_img6769728790807578.jpg"
+                    alt="IITRAM Ahmedabad">
+                <p>IITRAM Ahmedabad</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://gyaanarth.com/wp-content/uploads/2022/07/1533290814phpfUG5ZU.png"
+                    alt="Guru Ghasidas Vishwavidyalaya">
+                <p>Guru Ghasidas Vishwavidyalaya</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://www.admissionfever.com/Media/clgimg/gallery/3935_img7777658576867786.jpg"
+                    alt="J.K. Institute of Applied Physics & Technology">
+                <p>J.K. Institute of Applied Physics & Technology</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.Ea1A5BYCfLwpOplM5jicHAHaEc?rs=1&pid=ImgDetMain"
+                    alt="Mizoram University">
+                <p>Mizoram University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/125/2018/4/25/Tezpur-University-Tezpur1.jpg"
+                    alt="Tezpur University">
+                <p>Tezpur University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.PBkE5O_YvsUeTShpxcKydwAAAA?rs=1&pid=ImgDetMain"
+                    alt="Punjab Engineering College">
+                <p>Punjab Engineering College</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.pAeXg9KCwFWaNuPLoxf6LAHaFj?rs=1&pid=ImgDetMain"
+                    alt="Shri Mata Vaishno Devi University">
+                <p>Shri Mata Vaishno Devi University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.zcLXK0TxyO3ijbIhINMMywHaD4?rs=1&pid=ImgDetMain" alt="SPA Delhi">
+                <p>SPA Delhi</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/273/2018/2/13/SPA-Bhopal-6.png"
+                    alt="SPA Bhopal">
+                <p>SPA Bhopal</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.VTOWiyMiOYKAw7bU_BnRqAHaE8?rs=1&pid=ImgDetMain"
+                    alt="SPA Vijayawada">
+                <p>SPA Vijayawada</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/891/2018/10/30/Campus%20View%20of%20University%20of%20Mumbai%20Mumbai_Campus-View.jpg"
+                    alt="University of Mumbai">
+                <p>University of Mumbai</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/891/2018/10/30/Campus%20View%20of%20University%20of%20Mumbai%20Mumbai_Campus-View.jpg"
+                    alt="University of Delhi">
+                <p>University of Delhi</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/OIP.d2jEiqJmFjZMSgMMSKpTCgHaD8?rs=1&pid=ImgDetMain"
+                    alt="Jawaharlal Nehru Technological University">
+                <p>Jawaharlal Nehru Technological University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://images.news18.com/ibnlive/uploads/2021/05/1621929325_anna-univ.jpg"
+                    alt="Anna University">
+                <p>Anna University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://th.bing.com/th/id/R.6f3bda474075652c3e2f889fb8f5f140?rik=9CWcl59472E5Aw&riu=http%3a%2f%2fdesitraveler.com%2fwp-content%2fuploads%2f2013%2f09%2fOsmania-University-3-750x415.jpg&ehk=o8HSqSzPTnZUZnJOFn3ZVgdDMIMzuqalFUSt7%2b8DOjI%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
+                    alt="Osmania University">
+                <p>Osmania University</p>
+            </div>
+            <div class="college-box" data-category="gfti">
+                <img src="https://i0.wp.com/jaamiah.com/wp-content/uploads/2019/04/PU-LHE.jpg" alt="Punjab University">
+                <p>Punjab University</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>State Government Colleges</h2>
+        <div class="college-scroll">
+            <div class="college-box" data-category="state" data-state="andhra-pradesh">
+                <img src="https://th.bing.com/th/id/OIP.8t_-Ob1-fmabxT4QnUbkogHaDm?rs=1&pid=ImgDetMain"
+                    alt="Andhra University College of Engineering">
+                <p>Andhra University College of Engineering</p>
+                <p>Andhra Pradesh</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="arunachal-pradesh">
+                <img src="https://th.bing.com/th/id/OIP.Yjhw0tQsy4vk63ut2yiYbgHaCp?rs=1&pid=ImgDetMain"
+                    alt="Rajiv Gandhi Government Polytechnic">
+                <p>Rajiv Gandhi Government Polytechnic</p>
+                <p>Arunachal Pradesh</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="assam">
+                <img src="https://th.bing.com/th/id/OIP.kc8K5B1UlV2LpXgCTN8NtwHaDS?rs=1&pid=ImgDetMain"
+                    alt="Assam Engineering College">
+                <p>Assam Engineering College</p>
+                <p>Assam</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="bihar">
+                <img src="https://studybihar.in/wp-content/uploads/2022/05/Muzaffarpur-Institute-of-Technology-Bihar.jpg"
+                    alt="Muzaffarpur Institute of Technology">
+                <p>Muzaffarpur Institute of Technology</p>
+                <p>Bihar</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="chhattisgarh">
+                <img src="https://www.campusoption.com/images/colleges/gallery/23_11_16_050912_front_view.jpg"
+                    alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Chhattisgarh</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="goa">
+                <img src="https://th.bing.com/th/id/OIP.EgCSZJYryzYFjKUV7sdTRwHaE8?rs=1&pid=ImgDetMain"
+                    alt="Goa College of Engineering">
+                <p>Goa College of Engineering</p>
+                <p>Goa</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="gujarat">
+                <img src="https://th.bing.com/th/id/OIP.HJ8tdgS8rMV9yNjjsn4I6AHaE8?rs=1&pid=ImgDetMain"
+                    alt="L.D. College of Engineering">
+                <p>L.D. College of Engineering</p>
+                <p>Gujarat</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="haryana">
+                <img src="https://www.vidyavision.com/CollegeUploads/Photos/2017-27-6-22-07-23_gvtn3.jpg"
+                    alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Haryana</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="himachal-pradesh">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/9/2021/10/18/Campus%20Full%20View%20of%20Himachal%20Pradesh%20Technical%20University%20Hamirpur_Campus-View.jpg"
+                    alt="Himachal Pradesh Technical University">
+                <p>Himachal Pradesh Technical University</p>
+                <p>Himachal Pradesh</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="jharkhand">
+                <img src="https://i.ytimg.com/vi/dCMBRLq7sPM/maxresdefault.jpg" alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Jharkhand</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="karnataka">
+                <img src="https://th.bing.com/th/id/OIP.xSlrzmwttmyGovFA3AG2CQHaDv?rs=1&pid=ImgDetMain"
+                    alt="UVCE Bangalore">
+                <p>UVCE Bangalore</p>
+                <p>Karnataka</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="kerala">
+                <img src="https://th.bing.com/th/id/R.d94cda41e56a48ed5b42d179b113fd56?rik=JFUrf%2fPGmIM3oA&riu=http%3a%2f%2fwww.gecidukki.ac.in%2fUserFiles%2fPhotoGallery%2f7b4652017fe44aa38ac191ae204b888c.jpg&ehk=Fnb3hcPiBjcbr0q%2bX%2bngUrFwLbEFEAsTNWO3Co%2fG0DQ%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
+                    alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Kerala</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="madhya-pradesh">
+                <img src="https://th.bing.com/th/id/OIP.5dXanG6rA-_dlgA5U6MJOwHaD2?rs=1&pid=ImgDetMain"
+                    alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Madhya Pradesh</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="maharashtra">
+                <img src="https://cache.careers360.mobi/media/presets/720X480/colleges/social-media/media-gallery/4337/2019/3/4/Campus%20View%20of%20Government%20College%20of%20Engineering%20and%20Research%20Pune_Campus-View.JPG"
+                    alt="College of Engineering, Pune">
+                <p>College of Engineering, Pune</p>
+                <p>Maharashtra</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="manipur">
+                <img src="https://th.bing.com/th/id/OIP.EOenCKO7sXUUbfnMOez2nAHaE6?rs=1&pid=ImgDetMain"
+                    alt="Manipur Institute of Technology">
+                <p>Manipur Institute of Technology</p>
+                <p>Manipur</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="meghalaya">
+                <img src="https://th.bing.com/th/id/OIP.xGw3_ZhMVX_Zlux6BAHY3QHaDt?rs=1&pid=ImgDetMain"
+                    alt="Shillong Engineering College">
+                <p>Shillong Engineering College</p>
+                <p>Meghalaya</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="mizoram">
+                <img src="https://th.bing.com/th/id/OIP.plP81b5F_--KvtdDKVAfggHaEK?rs=1&pid=ImgDetMain"
+                    alt="Mizoram University">
+                <p>Mizoram University</p>
+                <p>Mizoram</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="nagaland">
+                <img src="https://th.bing.com/th/id/OIP.pvtEGEFigRQUOXj99f8ZGQHaE_?rs=1&pid=ImgDetMain"
+                    alt="Nagaland University">
+                <p>Nagaland University</p>
+                <p>Nagaland</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="odisha">
+                <img src="https://th.bing.com/th/id/R.bb94fc5fd7b413fddfba3e3d2f229207?rik=Vtx49akxPyY20w&riu=http%3a%2f%2fvssut.ac.in%2fimages%2fbanner%2fbanner_1591223543.jpg&ehk=8JfjDBLs6q%2bwwlkzSQqd%2fquC51Yf%2bXi0YUKTCep%2bMis%3d&risl=&pid=ImgRaw&r=0"
+                    alt="Veer Surendra Sai University">
+                <p>Veer Surendra Sai University</p>
+                <p>Odisha</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="punjab">
+                <img src="https://th.bing.com/th/id/OIP.cU_AKUS6AxQTF93h44UStQHaCv?rs=1&pid=ImgDetMain"
+                    alt="Punjab Engineering College">
+                <p>Punjab Engineering College</p>
+                <p>Punjab</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="rajasthan">
+                <img src="https://th.bing.com/th/id/OIP.8ljSK8WXeXoqMJDxO0hceAHaDI?rs=1&pid=ImgDetMain"
+                    alt="Government Engineering College">
+                <p>Government Engineering College</p>
+                <p>Rajasthan</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="sikkim">
+                <img src="https://th.bing.com/th/id/R.834f070d3b420468d31fb3a2e1025559?rik=nY6kZc%2fg1k1ztA&riu=http%3a%2f%2fsgcnamchi.com%2fwp-content%2fuploads%2f2022%2f06%2fCampus-View-of-Namchi-Government-College-Namchi_Campus-View.png&ehk=4Hnvg1MYe0jOAFcwH%2fhfSQ%2bawn8bBmXC43e59t21w2A%3d&risl=&pid=ImgRaw&r=0"
+                    alt="Sikkim Government College">
+                <p>Sikkim Government College</p>
+                <p>Sikkim</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="tamil-nadu">
+                <img src="https://th.bing.com/th/id/OIP.UdXNKh2k6TEwvRjfBoAs1gHaD-?rs=1&pid=ImgDetMain"
+                    alt="Government College of Technology">
+                <p>Government College of Technology</p>
+                <p>Tamil Nadu</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="telangana">
+                <img src="https://i.ytimg.com/vi/_xDtAC1Dz4M/maxresdefault.jpg" alt="Osmania University College">
+                <p>Osmania University College</p>
+                <p>Telangana</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="tripura">
+                <img src="https://th.bing.com/th/id/OIP.VECMid9aWaxYEUH_I_ahSgHaDM?rs=1&pid=ImgDetMain"
+                    alt="Tripura Institute of Technology">
+                <p>Tripura Institute of Technology</p>
+                <p>Tripura</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://hbtu.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.HtfD9VRQd2Q9-4Zsj8mL7AAAAA?rs=1&pid=ImgDetMain"
+                        alt="HBTU Campus">
+                    <p>Harcourt Butler Technical University</p>
+                </a>
+                <p>Kanpur</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://www.mmmut.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/R.acfd3dfa8ac7cc2287591b2c11686da2?rik=hxcUGY3zdKri1g&riu=http%3a%2f%2fwww.mmmut.ac.in%2fimages%2fb8.jpg&ehk=sxrlAB7ewOxXbW7V%2fx0%2blF14zKveePRACTICEK2b509mN%2f%2boc2c%3d&risl=&pid=ImgRaw&r=0"
+                        alt="MMMUT Campus">
+                    <p>Madan Mohan Malaviya University</p>
+                </a>
+                <p>Gorakhpur</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://gecbanda.ac.in" target="_blank">
+                    <img src="https://cache.careers360.mobi/media/colleges/social-media/media-gallery/2459/2018/7/27/Rajkiya-Engineering-College-Banda-16.jpg"
+                        alt="GEC Banda">
+                    <p>Government Engineering College</p>
+                </a>
+                <p>Banda</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://gec-basti.ac.in" target="_blank">
+                    <img src="https://www.gpbasti.com/assets/img/slider/College_Front1.jpg" alt="GEC Basti">
+                    <p>Government Engineering College</p>
+                </a>
+                <p>Basti</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://geckannauj.ac.in" target="_blank">
+                    <img src="https://reck.ac.in/wp-content/uploads/2023/05/2-1-1024x768.jpg" alt="GEC Kannauj">
+                    <p>Government Engineering College</p>
+                </a>
+                <p>Kannauj</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttar-pradesh">
+                <a href="https://gecsonbhadra.ac.in" target="_blank">
+                    <img src="https://images.collegedunia.com/public/reviewPhotos/317871/IMG-20220910-WA0014.jpg?mode=cover"
+                        alt="GEC Sonbhadra">
+                    <p>Government Engineering College</p>
+                </a>
+                <p>Sonbhadra</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="uttarakhand">
+                <img src="https://th.bing.com/th/id/OIP.8kdNPT7xIX7V_kI8bwYm6gHaFj?rs=1&pid=ImgDetMain"
+                    alt="Government Polytechnic">
+                <p>Government Polytechnic</p>
+                <p>Uttarakhand</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://www.jaduniv.edu.in/" target="_blank">
+                    <img src="https://images.indianexpress.com/2017/05/jadavpur.jpg" alt="Jadavpur University Campus">
+                    <p>Jadavpur University</p>
+                </a>
+                <p>Kolkata</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://gcect.org.in/" target="_blank">
+                    <img src="https://image-static.collegedunia.com/public/college_data/images/appImage/1488542068c3.jpg?h=240&w=1000&mode=crop"
+                        alt="GCET Serampore Campus">
+                    <p>GCET Serampore</p>
+                </a>
+                <p>Hooghly</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://gctb.ac.in/" target="_blank">
+                    <img src="https://images.collegedunia.com/public/reviewPhotos/228062/FB_IMG_1652789732095.jpg?mode=cover"
+                        alt="GCET Berhampore Campus">
+                    <p>GCET Berhampore</p>
+                </a>
+                <p>Murshidabad</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://gcect.org.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.Gv-XiTsZxVtnTijKA2B-dgHaE8?rs=1&pid=ImgDetMain"
+                        alt="Ceramic Technology College">
+                    <p>GCEC Kolkata</p>
+                </a>
+                <p>Kolkata</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://gcolt.ac.in/" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.sC8pLxzg78fNVtKtjX_VGwAAAA?rs=1&pid=ImgDetMain"
+                        alt="Leather Technology College">
+                    <p>GCELT Kolkata</p>
+                </a>
+                <p>Kolkata</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://gcek.ac.in/" target="_blank">
+                    <img src="https://images.shiksha.com/mediadata/images/1552715138phpC3AcrS_g.png"
+                        alt="GCE Kalyani Campus">
+                    <p>GCE Kalyani</p>
+                </a>
+                <p>Nadia</p>
+            </div>
+            <div class="college-box" data-category="state" data-state="west-bengal">
+                <a href="https://jgec.ac.in" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.O7hE_EAnjziA82wDiSFxOwHaDL?rs=1&pid=ImgDetMain"
+                        alt="Jalpaiguri Government Engineering College (JGEC)">
+                    <p>Government Engineering College (JGEC)</p>
+                </a>
+                <p>Jalpaiguri</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

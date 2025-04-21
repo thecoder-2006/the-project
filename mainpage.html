@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working 333</title>
+    <link rel="stylesheet" href="MainPage.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="head-left">
+                <img src="images/logo.png" alt="logo">
+                <h1>STUDENT SPHERE</h1>
+            </div>
+
+            <ul>
+                <li><a href="#">HOME</a></li>
+                <li><a href="news.html">NEWS & BLOG</a></li>
+                <li><a href="#" id="exploreButton">EXPLORE</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+
+            <div class="head-right">
+                <a href="#">NEW ACOUNT</a>
+
+                <div class="button-box">
+                    <button id="signinButton">SIGN IN</button>
+                </div>
+            </div>
+
+            <div class="menu-icon">
+                <i class='bx bx-menu'></i>
+            </div>
+        </header>
+
+
+        <div class="sidebar">
+            <div class="close-icon">
+                <i class='bx bx-x'></i>
+            </div>
+
+            <ul>
+                <li><a href="#">HOME</a></li>
+                <li><a href="news.html">NEWS & BLLOG</a></li>
+                <li><a href="#" id="sidebarExploreButton">EXPLORE</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+
+            <div class="social-sidebar">
+                <a href="#"><i class='bx bxl-discord-alt'></i></a>
+                <a href="#"><i class='bx bxl-youtube'></i></a>
+                <a href="#"><i class='bx bxl-github'></i></a>
+                <a href="#"><i class='bx bxl-linkedin-square'></i></a>
+            </div>
+
+            <div class="button-box">
+                <button id="signinButton">SIGN IN</button>
+            </div>
+
+        </div>
+
+
+        <section class="hero">
+            <img class="hero-blur-image" src="images/hero blur img.png" alt="">
+            <img class="hero-icons-image parallax" data-speed="4" src="images/hero icons img.png" alt="">
+            <img class="hero-rings-image" src="images/hero rings icon.png" alt="">
+
+            <h1>Your Path to Affordable Education Starts Here</h1>
+            <h3>Search thousands of scholarships, track exam, explore books, and read real college reviews—all for free.
+            </h3>
+
+            <!-- **we can avoid "Get started buttton" -->
+
+            <button id="getStartedButton">Get Started</button>
+
+            <div class="hero-image-box">
+                <div class="robot-box">
+                    <div class="robot-header"></div>
+                    <img src="images/robot1.png" alt="ribot-img">
+                </div>
+
+            </div>
+
+            <h4>Helping student to find the best education resources</h4>
+
+        </section>
+
+        <div id="signinPage" class="signin-page-box">
+            <div class="signin-page">
+                <h1>Sign In</h1>
+                <input type="text" placeholder="User Name">
+                <input type="text" placeholder="Email">
+                <input type="text" placeholder="Password">
+                <button>Sign in</button>
+                <p>Login</p>
+                <div id="closeIcon"><i class='bx bx-x'></i></div>
+            </div>
+        </div>
+
+        <section class="features-section">
+            <h1>Plan Smarter, Stress Less-with STUDENT SPHERE</h1>
+
+            <div class="features-gradient"></div>
+
+            <div class="features-card-box">
+                <!-- Current Scholarship Card (modified) -->
+                <!-- Modified features-card sections -->
+
+                               <!-- SCHOLERSHIP -->
+
+                <div class="features-card autoDisplay" onclick="window.open('scholarship.html', '_blank')">
+                    <h2>Find Scholarship</h2>
+                    <p>Lets users quickly find their scholarship without having to search through multiple sources.</p>
+                    <div class="explore-more">
+                        <img src="images/MiniScholership tool.png" alt="">
+                        <a href="scholarship.html" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+
+                                 <!-- EXAM -->
+
+                <div class="features-card autoDisplay" onclick="window.open('exam.html', '_blank')">
+                    <h2>Explore Exams</h2>
+                    <p>Helps students discover the right exams—from competitive tests in India to study-abroad entrance tests—all in one place, saving time and reducing confusion.</p>
+
+                    <div class="explore-more">
+                        <img src="images/MiniExamNavigatorTool.png" alt="">
+                        <a href="exam.html" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+
+                                    <!-- COLLEGES -->
+
+                <div class="features-card autoDisplay" onclick="window.open('college_index.html', '_blank')">
+                    <h2>Explore Colleges</h2>
+                    <p>Helps students compare colleges with honest reviews, fees, placements, and cutoffs—so you can pick the best fit without second-guessing.</p>
+                    <div class="explore-more">
+                        <img src="images/MiniCoolegeReviewTool.png" alt="">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+
+                                     <!-- BOOKS -->
+
+                <div class="features-card autoDisplay" onclick="window.open('books.html', '_blank')">
+                    <h2>Explore Books</h2>
+                    <p>Lets users quickly find their desire books without having to search through multiple sources.</p>
+                    <div class="explore-more">
+                        <img src="images/MiniBookTools.png" alt="">
+                        <a href="books.html" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+
+                           <!-- DOUBT SOLVING -->
+
+                <div class="features-card autoDisplay" onclick="window.open('chatbot.html', '_blank')">
+                    <h2>Ask Doubt</h2>
+                    <p>Get instant answers to all your study doubts—from JEE problems to essay writing—with expert help and AI support, 24/7..</p>
+                    <div class="explore-more">
+                        <img src="images/MiniDoubtSolvingtool.png" alt="">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+
+                <div class="features-card autoDisplay" onclick="window.open('#', '_blank')">
+                    <h2>Ask Anything</h2>
+                    <p>Lets users quickly find answers to their questions without having to search through multiple sources.</p>
+                    <div class="explore-more">
+                        <img src="images/MiniDoubtSolvingtool.png" alt="">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Explore More <i
+                                class='bx bx-link-external'></i></a>
+                    </div>
+                    <img class="features-back-img" src="images/features back img.png" alt="">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCHOLERSHIP SECTION -->
+
+        <section class="chatApp-section">
+            <div class="left-container">
+                <h1 class="fadeInLeft">We help you to get
+                    the best scholarship</h1>
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt="">India's No. #1 Scholarship Search Engine
+                </p>
+
+                <h2 class="fadeInLeft">India's No. #1 Scholarship Search Engine for Indian students.</h2>
+
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt=""> Seamless searching</p>
+
+                <h2 class="fadeInLeft">Information about all types of scholarships at your fingertip with powerful
+                    searching technique.</h2>
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt="">Excel your study path</p>
+
+                <h2 class="fadeInLeft">Uniform growth of your career with higher studies. Consult us to know more.</h2>
+
+                <div class="button-box fadeInLeft">
+                    <button id="signinButton">TRY IT NOW</button>
+                </div>
+            </div>
+
+            <div class="right-container">
+                <h2 class="fadeInRight">With smart search and trusted guidance, it's the perfect platform for students
+                    to unlock their dream scholarships</h2>
+                <img class="fadeInRight" src="images/MyToolsBook.png" alt="">
+            </div>
+        </section>
+
+
+        <section class="generative-section">
+
+            <div class="grid-box">
+
+                <!-- COLLEGE SECTION -->
+
+                <div class="grid-card grid2 autoBlur">
+                    <div class="info">
+                        <h2 class="fadeInLeft">Find best College for you</h2>
+                        <h4 class="fadeInLeft">Discover the right college with real student reviews, ratings, and
+                            insights.From campus life to placement records, explore detailed feedback and honest
+                            experiences to help you make smarter academic decisions. Your future starts with the right
+                            choice—make it count!</h4>
+
+                    </div>
+
+                    <img src="images/findexamBlue.png" alt="">
+                </div>
+
+
+                <!-- EXAM SECTION -->
+
+                <div class="grid-card grid3 autoBlur">
+                    <div class="info">
+                        <h2 class="fadeInRight">Find best exam for you</h2>
+                        <h4 class="fadeInRight">Stay ahead with complete and up-to-date exam details—all in one
+                            place.From application deadlines and eligibility criteria to syllabus and exam patterns, get
+                            everything you need to prepare with confidence. No more last-minute surprises—just focused
+                            preparation.</h4>
+                    </div>
+                    <img src="images/collegeReview.png" alt="">
+                </div>
+                <!-- DOUBT SOLVING SECTION -->
+                <div class="grid-card grid4 autoBlur">
+                    <img src="images/service-4.png" alt="" class="grid4-robot-img">
+                    <div class="info2">
+                        <h2>AI-Powered Doubt SolVING in Seconds – Learn Smarter, Not Harder!</h2>
+                        <h4>PARALLAX unlocks the potential of AI-powered DOUBT-SOLVER</h4>
+                        <p><img src="images/Check circle.png" alt=""> Instant Doubt Resolution</p>
+                        <p><img src="images/Check circle.png" alt=""> Smart Subject Detection</p>
+                        <p><img src="images/Check circle.png" alt=""> 24/7 Learning Companion</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- BOOK SECTION -->
+        <section class="chatApp-section">
+            <div class="left-container">
+                <h1 class="fadeInLeft">We help you to explore the best books</h1>
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt="">India's No. #1 Student Book Explorer</p>
+
+                <h2 class="fadeInLeft">India's top platform to discover academic and reference books for every course
+                    and need</h2>
+
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt=""> Seamless discovery</p>
+
+                <h2 class="fadeInLeft">Find books from top authors, publishers, and colleges with our smart
+                    recommendation system.</h2>
+                <p class="fadeInLeft"><img src="images/Check circle.png" alt="">Boost your learning journey</p>
+
+                <h2 class="fadeInLeft">Access the right resources at the right time to enhance your academic
+                    performance.</h2>
+
+                <div class="button-box fadeInLeft">
+                    <button id="tryBooksButton">TRY IT NOW</button>
+                </div>
+            </div>
+
+            <div class="right-container">
+                <h2 class="fadeInRight">With smart filters and expert-picked content, it's the ultimate destination for
+                    students to find the books that shape their future.</h2>
+                <img class="fadeInRight" src="images/exploreBook.png" alt="">
+
+            </div>
+        </section>
+
+
+        <!-- GLOAB IMAGE SECTION -->
+
+        <section class="pricing-section">
+            <div class="pricing-img-box">
+                <img class="parallax" data-speed="4" src="images/pricing-parallax.png" alt="">
+                <img src="images/magical-glob.png" alt="">
+            </div>
+        </section>
+
+
+
+        <footer>
+            <h1>©️2025, Created with ❤️ by TEAM PARALLAX</h1>
+            <div class="box-icons">
+                <!--a href="#"><i class='bx bxl-discord-alt' ></i></a-->
+                <a href="#"><i class='bx bxl-youtube'></i></a>
+                <a href="#"><i class='bx bxl-github'></i></a>
+                <a href="#"><i class='bx bxl-linkedin-square'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="MainPage.js"></script>
+</body>
+
+</html>

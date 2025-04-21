@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colleges & Universities in India</title>
+    <link rel="stylesheet" href="college_index.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, rgba(0, 20, 64, 0.7) 0%, rgba(0, 48, 128, 0.7) 100%), url('https://media.cntraveler.com/photos/56953a3965492c403b26f6f0/master/pass/ucla-cr-alamy.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        /* Background circular elements */
+        .background-circles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(125, 167, 255, 0.1);
+        }
+        
+        .circle-1 {
+            width: 80vw;
+            height: 80vw;
+            max-width: 800px;
+            max-height: 800px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 8s infinite alternate;
+        }
+        
+        .circle-2 {
+            width: 60vw;
+            height: 60vw;
+            max-width: 600px;
+            max-height: 600px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s infinite alternate-reverse;
+        }
+        
+        .circle-3 {
+            width: 40vw;
+            height: 40vw;
+            max-width: 400px;
+            max-height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
+        
+        /* Main Content */
+        .main-content {
+            padding: 120px 30px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 42px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 3px;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 20px 50px 20px 25px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .popular-searches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .popular-tag {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popular-tag:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 12px 25px;
+            margin: 0 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .option-box {
+            background: linear-gradient(135deg, rgba(28, 58, 148, 0.8) 0%, rgba(39, 95, 188, 0.8) 100%);
+            color: white;
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .option-box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(41, 84, 163, 0.9) 0%, rgba(65, 132, 234, 0.9) 100%);
+        }
+        
+        .option-box::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            transform: rotate(30deg);
+        }
+        
+        .option-box:hover::before {
+            opacity: 1;
+            animation: shine 1.5s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                top: -100%;
+                left: -100%;
+            }
+            100% {
+                top: 100%;
+                left: 100%;
+            }
+        }
+        
+        .option-box i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .option-box:hover i {
+            transform: scale(1.2);
+        }
+        
+        .option-box .count {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            padding: 20px;
+            background: rgba(0, 12, 36, 0.5);
+            backdrop-filter: blur(5px);
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: left;
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-col h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #4facfe;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #4facfe;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            padding-top: 20px;
+            text-align: center;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #001e5c 0%, #003080 100%);
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 12, 36, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                font-size: 18px;
+            }
+            
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            .main-content {
+                padding: 100px 20px 40px;
+            }
+            
+            h1 {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+            
+            .search-box input {
+                padding: 15px 45px 15px 20px;
+                font-size: 16px;
+            }
+            
+            .option-box {
+                padding: 25px 20px;
+                min-height: 180px;
+                font-size: 18px;
+            }
+            
+            .option-box i {
+                font-size: 40px;
+            }
+            
+            .nav-tab {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="background-circles">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+    
+    
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Colleges & Universities in India</h1>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" placeholder="Search for colleges, courses or cities..." id="searchInput">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="popular-searches">
+                <div class="popular-tag">Top MBA</div>
+                <div class="popular-tag">Engineering</div>
+                <div class="popular-tag">Delhi</div>
+                <div class="popular-tag">Medical</div>
+                <div class="popular-tag">Bangalore</div>
+                <div class="popular-tag">Computer Science</div>
+                <div class="popular-tag">Scholarships</div>
+            </div>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="all">All</div>
+            <div class="nav-tab" data-tab="top-rated">Top Rated</div>
+            <div class="nav-tab" data-tab="trending">Trending</div>
+            <div class="nav-tab" data-tab="new">New</div>
+        </div>
+        
+        <div class="grid-container">
+            <a href="engineering.html" class="option-box" onclick="toggleModal('engineeringModal'); return false;">
+                <i class="fas fa-cogs"></i>
+                Engineering Colleges
+                <span class="count">2,500+</span>
+            </a>
+            <a href="#" class="option-box" onclick="toggleModal('medicalModal'); return false;">
+                <i class="fas fa-stethoscope"></i>
+                Medical Colleges
+                <span class="count">600+</span>
+            </a>
+            <a href="#" class="option-box" onclick="toggleModal('lawModal'); return false;">
+                <i class="fas fa-gavel"></i>
+                Law Colleges
+                <span class="count">350+</span>
+            </a>
+            <a href="#" class="option-box" onclick="toggleModal('nursingModal'); return false;">
+                <i class="fas fa-user-nurse"></i>
+                Nursing Colleges
+                <span class="count">450+</span>
+            </a>
+            <a href="#" class="option-box" onclick="toggleModal('universityModal'); return false;">
+                <i class="fas fa-university"></i>
+                Universities
+                <span class="count">900+</span>
+            </a>
+            <a href="#" class="option-box" onclick="toggleModal('othersModal'); return false;">
+                <i class="fas fa-graduation-cap"></i>
+                Others
+                <span class="count">1,200+</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>EduExplorer</h3>
+                <p>Helping students find their perfect educational institution across India since 2020.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Admission Guide</a></li>
+                    <li><a href="#">Scholarships</a></li>
+                    <li><a href="#">Career Advice</a></li>
+                    <li><a href="#">Campus Life</a></li>
+                    <li><a href="#">Study Tips</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Delhi</li>
+                    <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                    <li><i class="fas fa-envelope"></i> info@eduexplorer.in</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2025 EduExplorer India. All rights reserved.
+        </div>
+    </footer>
+    
+    <!-- Engineering Modal -->
+    <div class="modal" id="engineeringModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('engineeringModal')">
+
+engineeringModal')">×</span>
+            <h2 style="margin-bottom: 20px;">Engineering Colleges</h2>
+            <p style="margin-bottom: 20px;">Browse through India's top engineering colleges and institutions. Filter by location, specialization, fees, and more.</p>
+            
+            <h3 style="margin-bottom: 15px;">Popular Engineering Institutions</h3>
+            <ul style="list-style-type: none; padding: 0; margin-bottom: 20px;">
+                <li style="padding: 10px; background: rgba(255, 255, 255, 0.1); margin-bottom: 10px; border-radius: 8px;">
+                    <strong>IIT Bombay</strong> - Mumbai, Maharashtra
+                </li>
+                <li style="padding: 10px; background: rgba(255, 255, 255, 0.1); margin-bottom: 10px; border-radius: 8px;">
+                    <strong>IIT Delhi</strong> - New Delhi
+                </li>
+                <li style="padding: 10px; background: rgba(255, 255, 255, 0.1); margin-bottom: 10px; border-radius: 8px;">
+                    <strong>BITS Pilani</strong> - Pilani, Rajasthan
+                </li>
+                <li style="padding: 10px; background: rgba(255, 255, 255, 0.1); margin-bottom: 10px; border-radius: 8px;">
+                    <strong>NIT Trichy</strong> - Tiruchirappalli, Tamil Nadu
+                </li>
+            </ul>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                <div style="padding: 10px 20px; background: rgba(255, 255, 255, 0.15); border-radius: 50px; cursor: pointer;">
+                    Computer Science
+                </div>
+                <div style="padding: 10px 20px; background: rgba(255, 255, 255, 0.15); border-radius: 50px; cursor: pointer;">
+                    Mechanical
+                </div>
+                <div style="padding: 10px 20px; background: rgba(255, 255, 255, 0.15); border-radius: 50px; cursor: pointer;">
+                    Electrical
+                </div>
+                <div style="padding: 10px 20px; background: rgba(255, 255, 255, 0.15); border-radius: 50px; cursor: pointer;">
+                    Civil
+                </div>
+            </div>
+            
+            <button style="width: 100%; padding: 12px; background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
+                Explore All Engineering Colleges
+            </button>
+        </div>
+    </div>
+    
+    <!-- Medical Modal -->
+    <div class="modal" id="medicalModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('medicalModal')">×</span>
+            <h2>Medical Colleges</h2>
+            <img src="https://speckyboy.com/wp-content/uploads/2021/10/coming-soon-page-web-design-inspiration-01.jpg" alt="Coming Soon" style="width: 100%; height: auto;">
+            <p>Content about medical colleges will appear here...</p>
+        </div>
+    </div>
+
+    <!-- Law Modal -->
+    <div class="modal" id="lawModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('lawModal')">×</span>
+            <h2>Law Colleges</h2>
+            <img src="https://speckyboy.com/wp-content/uploads/2021/10/coming-soon-page-web-design-inspiration-01.jpg" alt="Coming Soon" style="width: 100%; height: auto;">
+            <p>Content about law colleges will appear here...</p>
+        </div>
+    </div>
+
+    <!-- Nursing Modal -->
+    <div class="modal" id="nursingModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('nursingModal')">×</span>
+            <h2>Nursing Colleges</h2>
+            <img src="https://speckyboy.com/wp-content/uploads/2021/10/coming-soon-page-web-design-inspiration-01.jpg" alt="Coming Soon" style="width: 100%; height: auto;">
+            <p>Content about nursing colleges will appear here...</p>
+        </div>
+    </div>
+
+    <!-- University Modal -->
+    <div class="modal" id="universityModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('universityModal')">×</span>
+            <h2>Universities</h2>
+            <img src="https://speckyboy.com/wp-content/uploads/2021/10/coming-soon-page-web-design-inspiration-01.jpg" alt="Coming Soon" style="width: 100%; height: auto;">
+            <p>Content about universities will appear here...</p>
+        </div>
+    </div>
+
+    <!-- Others Modal -->
+    <div class="modal" id="othersModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('othersModal')">×</span>
+            <h2>Other Educational Institutions</h2>
+            <img src="https://speckyboy.com/wp-content/uploads/2021/10/coming-soon-page-web-design-inspiration-01.jpg" alt="Coming Soon" style="width: 100%; height: auto;">
+            <p>Content about other educational institutions will appear here...</p>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close-modal" onclick="closeModal('loginModal')">×</span>
+            <h2 style="margin-bottom: 20px; text-align: center;">Login</h2>
+            
+            <form style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" placeholder="Username" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                <input type="password" placeholder="Password" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                <button type="submit" style="padding: 10px; border-radius: 5px; background-color: #4facfe; color: white; border: none; cursor: pointer;">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
